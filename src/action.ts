@@ -5,8 +5,8 @@ import {getMonoRepo, validateSanityTemplate} from './validator'
 
 async function run(): Promise<void> {
   try {
-    const token = core.getInput('github_token', {required: true})
     const repository = core.getInput('repository', {required: true})
+    const token = core.getInput('github_token', {required: false})
     const [owner, repo] = repository.split('/')
 
     const octokit = github.getOctokit(token)
@@ -17,13 +17,13 @@ async function run(): Promise<void> {
 
     const baseUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}`
 
-    const packages = (await getMonoRepo(baseUrl, {
-      Authorization: `Bearer ${token}`,
-    })) || ['']
+    const headers: Record<string, string> = {}
+    if (token) {
+      headers.Authorization = `Bearer ${token}`
+    }
 
-    const result = await validateSanityTemplate(baseUrl, packages, {
-      Authorization: `Bearer ${token}`,
-    })
+    const packages = (await getMonoRepo(baseUrl, headers)) || ['']
+    const result = await validateSanityTemplate(baseUrl, packages, headers)
 
     if (!result.isValid) {
       core.setFailed(result.errors.join('\n'))
