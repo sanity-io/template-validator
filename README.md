@@ -13,11 +13,11 @@ A validation utility for Sanity.io template repositories. Use it as a dependency
 ## Installation
 
 ```bash
-npm install sanity-template-validator
+npm install @sanity/template-validator
 # or
-yarn add sanity-template-validator
+yarn add @sanity/template-validator
 # or
-pnpm add sanity-template-validator
+pnpm add @sanity/template-validator
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ pnpm add sanity-template-validator
 ### As a Node.js Dependency
 
 ```typescript
-import {validateSanityTemplate, getMonoRepo} from 'sanity-template-validator'
+import {validateSanityTemplate, getMonoRepo} from '@sanity/template-validator'
 
 async function validateMyTemplate() {
   const baseUrl = 'https://raw.githubusercontent.com/owner/repo/branch'
@@ -56,9 +56,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Validate Sanity Template
-        uses: sanity-io/sanity-template-validator@v1
+        uses: sanity-io/template-validator@v0.1.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
 ```
 
@@ -144,5 +143,5 @@ MIT © Sanity.io
 
 ## Support
 
-- [Create an issue](https://github.com/sanity-io/sanity-template-validator/issues)
+- [Create an issue](https://github.com/sanity-io/template-validator/issues)
 - [Sanity Community](https://slack.sanity.io)
