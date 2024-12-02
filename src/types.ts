@@ -22,6 +22,7 @@ export type RepoInfo = {
   filePath: string
 }
 
+/** @public */
 export type ValidationResult = {
   isValid: boolean
   errors: string[]

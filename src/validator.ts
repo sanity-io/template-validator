@@ -15,6 +15,7 @@ const ENV_FILE = {
 
 const ENV_TEMPLATE_FILES = [ENV_FILE.TEMPLATE, ENV_FILE.EXAMPLE, ENV_FILE.LOCAL_EXAMPLE] as const
 
+/** @public */
 export async function getMonoRepo(
   baseUrl: string,
   headers: Record<string, string> = {},
@@ -61,7 +62,7 @@ export async function getMonoRepo(
         }
       },
     },
-  }
+  } as const
 
   const fileChecks = await Promise.all(
     Object.keys(handlers).map(async (file) => {
@@ -72,7 +73,7 @@ export async function getMonoRepo(
 
   for (const check of fileChecks) {
     if (!check.exists) continue
-    const result = handlers[check.file].check(check.content)
+    const result = handlers[check.file as keyof typeof handlers].check(check.content)
     if (result) return result
   }
 
@@ -162,6 +163,7 @@ async function validatePackage(
   }
 }
 
+/** @public */
 export async function validateSanityTemplate(
   baseUrl: string,
   packages: string[] = [''],
@@ -190,7 +192,7 @@ export async function validateSanityTemplate(
     errors.push('At least one package must include a sanity.cli.js or sanity.cli.ts file')
   }
 
-  const missingEnvPackages = packages.filter((pkg, i) => !validations[i].hasEnvFile)
+  const missingEnvPackages = packages.filter((_, i) => !validations[i].hasEnvFile)
   if (missingEnvPackages.length > 0) {
     errors.push(
       `The following packages are missing .env.template, .env.example, or .env.local.example files: ${missingEnvPackages.join(

@@ -19,7 +19,7 @@ async function run(): Promise<void> {
 
     const headers: Record<string, string> = {}
     if (token) {
-      headers.Authorization = `Bearer ${token}`
+      headers['Authorization'] = `Bearer ${token}`
     }
 
     const packages = (await getMonoRepo(baseUrl, headers)) || ['']
