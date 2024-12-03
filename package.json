@@ -1,6 +1,6 @@
 {
   "name": "@sanity/template-validator",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Sanity template validator for remote templates",
   "keywords": [],
   "homepage": "https://github.com/sanity-io/template-validator#readme",
@@ -32,8 +32,10 @@
   ],
   "scripts": {
     "build": "pkg build --strict --clean --check",
+    "build:action": "ncc build src/action.ts -o dist --source-map --target es2020 -m",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
+    "prepare": "npm run build:action",
     "ts:check": "tsc --noEmit"
   },
   "lint-staged": {
@@ -53,6 +55,7 @@
     "@sanity/prettier-config": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "@vercel/ncc": "^0.38.3",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",

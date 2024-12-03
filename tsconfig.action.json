@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.settings",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist/action",
+    "rootDir": "./src"
+  },
+  "include": ["./src/action.ts", "./src/validator.ts", "./src/types.ts"],
+  "exclude": ["./node_modules"]
+}
