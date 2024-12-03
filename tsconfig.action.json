@@ -4,7 +4,9 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "./dist/action",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["./src/action.ts", "./src/validator.ts", "./src/types.ts"],
   "exclude": ["./node_modules"]
