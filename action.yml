@@ -3,10 +3,10 @@ description: "Validates Sanity.io template repositories"
 inputs:
   github_token:
     description: "GitHub token for API access"
-    required: true
+    required: false
   repository:
     description: "Repository to validate (owner/repo)"
     required: true
 runs:
-  using: "node16"
-  main: "dist/index.js"
+  using: "node20"
+  main: "dist/action/index.js"
