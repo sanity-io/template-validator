@@ -32,7 +32,7 @@
   ],
   "scripts": {
     "build": "pkg build --strict --clean --check",
-    "build:action": "ncc build src/action.ts -o dist/action --source-map --target es2020 -m --no-source-map-register -t",
+    "build:action": "ncc build src/action.ts -o dist/action",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
     "prepare": "npm run build:action",
