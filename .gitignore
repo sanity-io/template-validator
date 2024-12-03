@@ -3,6 +3,5 @@
 *.tgz
 
 .DS_Store
-dist
 etc
 node_modules
