@@ -1,13 +1,16 @@
 {
-  "extends": "./tsconfig.settings",
   "compilerOptions": {
+    "target": "ES2020",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "outDir": "./dist/action",
     "rootDir": "./src",
-    "noEmit": true,
-    "allowImportingTsExtensions": true
+    "noEmit": true
   },
   "include": ["./src/action.ts", "./src/validator.ts", "./src/types.ts"],
-  "exclude": ["./node_modules"]
+  "exclude": ["node_modules"]
 }
