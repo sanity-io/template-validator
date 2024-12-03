@@ -3,6 +3,10 @@
 *.tgz
 
 .DS_Store
-dist
 etc
 node_modules
+
+/dist/*
+!/dist/action/
+/dist/action/*
+!/dist/action/index.js
