@@ -56,7 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate Sanity Template
-        uses: sanity-io/template-validator@v0.1.0
+        uses: sanity-io/template-validator@v0.1.6
         with:
           repository: ${{ github.repository }}
 ```
@@ -131,7 +131,6 @@ A valid Sanity template must meet the following criteria:
 | Input | Description | Required |
 |-------|-------------|----------|
 | `repository` | Repository to validate (owner/repo format) | Yes |
-| `github_token` | GitHub token for API access | no |
 
 ## Contributing
 

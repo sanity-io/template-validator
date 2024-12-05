@@ -1,9 +1,6 @@
 name: "Sanity Template Validator"
 description: "Validates Sanity.io template repositories"
 inputs:
-  github_token:
-    description: "GitHub token for API access"
-    required: false
   repository:
     description: "Repository to validate (owner/repo)"
     required: true
