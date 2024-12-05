@@ -48,7 +48,7 @@ async function validateMyTemplate() {
 
 ```yaml
 name: Validate Template
-on: [push, pull_request]
+on: push
 
 jobs:
   validate:
