@@ -17,6 +17,8 @@ jobs:
           node-version: 20
       - name: install ncc
         run: npm i -g @vercel/ncc
+      - name: install typescript
+        run: npm i -g typescript
       - uses: joshjohanning/publish-github-action@v1.4.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
