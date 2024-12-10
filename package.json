@@ -35,7 +35,6 @@
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
     "package": " ncc build src/action.ts -o dist",
-    "prepare": "npm run build:action",
     "ts:check": "tsc --noEmit"
   },
   "lint-staged": {
