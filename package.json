@@ -32,7 +32,6 @@
   ],
   "scripts": {
     "build": "pkg build --strict --clean --check",
-    "build:action": "ncc build src/action.ts -o dist/action",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
     "package": " ncc build src/action.ts -o dist",
@@ -56,7 +55,6 @@
     "@sanity/prettier-config": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "@vercel/ncc": "^0.38.3",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
