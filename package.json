@@ -34,7 +34,7 @@
     "build": "pkg build --strict --clean --check",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
-    "package": "npx ncc build src/action.ts -o dist",
+    "package": "ncc build src/action.ts -o dist",
     "ts:check": "tsc --noEmit"
   },
   "lint-staged": {
@@ -47,6 +47,7 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
+    "@vercel/ncc": "^0.38.3",
     "yaml": "^2.6.1"
   },
   "devDependencies": {

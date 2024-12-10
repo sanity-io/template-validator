@@ -15,8 +15,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: install global packages
-        run: npm i -g @vercel/ncc typescript
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       - uses: joshjohanning/publish-github-action@v1.4.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
