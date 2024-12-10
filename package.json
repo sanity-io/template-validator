@@ -1,6 +1,6 @@
 {
   "name": "@sanity/template-validator",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Sanity template validator for remote templates",
   "keywords": [],
   "homepage": "https://github.com/sanity-io/template-validator#readme",
@@ -35,6 +35,7 @@
     "build:action": "ncc build src/action.ts -o dist/action",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
+    "package": " ncc build src/action.ts -o dist",
     "prepare": "npm run build:action",
     "ts:check": "tsc --noEmit"
   },
