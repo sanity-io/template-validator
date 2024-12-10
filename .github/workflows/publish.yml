@@ -15,10 +15,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: install ncc
-        run: npm i -g @vercel/ncc
-      - name: install typescript
-        run: npm i -g typescript
+      - name: install global packages
+        run: npm i -g @vercel/ncc typescript
       - uses: joshjohanning/publish-github-action@v1.4.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
