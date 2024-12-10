@@ -34,7 +34,7 @@
     "build": "pkg build --strict --clean --check",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
-    "package": " ncc build src/action.ts -o dist",
+    "package": "npx ncc build src/action.ts -o dist",
     "ts:check": "tsc --noEmit"
   },
   "lint-staged": {
