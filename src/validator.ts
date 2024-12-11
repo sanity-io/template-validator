@@ -2,18 +2,27 @@ import {parse as parseYaml} from 'yaml'
 
 import type {ValidationResult} from './types'
 
-const ENV_VAR = {
+/** @public */
+export const REQUIRED_ENV_VAR = {
   PROJECT_ID: /SANITY(?:_STUDIO)?_PROJECT_ID/,
   DATASET: /SANITY(?:_STUDIO)?_DATASET/,
 } as const
 
-const ENV_FILE = {
+/** @public */
+export const ENV_FILE = {
   TEMPLATE: '.env.template',
   EXAMPLE: '.env.example',
   LOCAL_EXAMPLE: '.env.local.example',
+  LOCAL_TEMPLATE: '.env.local.template',
 } as const
 
-const ENV_TEMPLATE_FILES = [ENV_FILE.TEMPLATE, ENV_FILE.EXAMPLE, ENV_FILE.LOCAL_EXAMPLE] as const
+/** @public */
+export const ENV_TEMPLATE_FILES = [
+  ENV_FILE.TEMPLATE,
+  ENV_FILE.EXAMPLE,
+  ENV_FILE.LOCAL_EXAMPLE,
+  ENV_FILE.LOCAL_TEMPLATE,
+] as const
 
 /** @public */
 export async function getMonoRepo(
@@ -139,8 +148,8 @@ async function validatePackage(
 
   if (envFile) {
     const envContent = envFile.content
-    const hasProjectId = envContent.match(ENV_VAR.PROJECT_ID)
-    const hasDataset = envContent.match(ENV_VAR.DATASET)
+    const hasProjectId = envContent.match(REQUIRED_ENV_VAR.PROJECT_ID)
+    const hasDataset = envContent.match(REQUIRED_ENV_VAR.DATASET)
 
     if (!hasProjectId || !hasDataset) {
       const missing = []
