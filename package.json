@@ -1,0 +1,69 @@
+{
+  "name": "@sanity/template-validator",
+  "version": "1.0.0",
+  "description": "Sanity template validator for remote templates",
+  "keywords": [],
+  "homepage": "https://github.com/sanity-io/template-validator#readme",
+  "bugs": {
+    "url": "https://github.com/sanity-io/template-validator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sanity-io/template-validator.git"
+  },
+  "license": "MIT",
+  "author": "Sanity.io <hello@sanity.io>",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "pkg build --strict --clean --check",
+    "format": "prettier --write --cache --ignore-unknown .",
+    "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
+    "package": "echo 'Starting build' && ncc build src/action.ts -o dist && echo 'Build complete'",
+    "ts:check": "tsc --noEmit"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ]
+  },
+  "browserslist": "extends @sanity/browserslist-config",
+  "prettier": "@sanity/prettier-config",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
+    "@sanity/pkg-utils": "^6.11.13",
+    "typescript": "^5.7.2",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
+    "@sanity/prettier-config": "^1.0.3",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.4.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

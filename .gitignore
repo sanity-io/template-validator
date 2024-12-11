@@ -1,0 +1,12 @@
+*.local
+*.log
+*.tgz
+
+.DS_Store
+etc
+node_modules
+
+/dist/*
+!/dist/action/
+/dist/action/*
+!/dist/action/index.js
