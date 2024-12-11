@@ -1,8 +1,11 @@
 name: "Publish GitHub Action"
+
 on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "README.md"
 
 permissions:
   contents: write
@@ -15,20 +18,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: install ncc
+        run: npm i -g @vercel/ncc
       - uses: sanity-io/publish-github-action@v1.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
