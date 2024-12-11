@@ -34,5 +34,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           npm_package_command: npm run package
           commit_node_modules: false
-          publish_minor_version: false
+          publish_minor_version: true
           publish_release_branch: false
