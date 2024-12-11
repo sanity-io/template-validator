@@ -1,6 +1,6 @@
 {
   "name": "@sanity/template-validator",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Sanity template validator for remote templates",
   "keywords": [],
   "homepage": "https://github.com/sanity-io/template-validator#readme",
@@ -48,19 +48,21 @@
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
     "@sanity/pkg-utils": "^6.11.13",
+    "@vercel/ncc": "^0.38.3",
+    "typescript": "^5.7.2",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
     "@sanity/prettier-config": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "@vercel/ncc": "^0.38.3",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.4.1",
-    "typescript": "^5.7.2",
-    "yaml": "^2.6.1"
+    "prettier": "^3.4.1"
   },
   "engines": {
     "node": ">=18.0.0"
