@@ -29,7 +29,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - uses: joshjohanning/publish-github-action@v1.4.0
+      - uses: sanity-io/publish-github-action@feat/respect-preferred-package-manager
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           npm_package_command: npm run package
