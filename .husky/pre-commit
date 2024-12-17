@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Check if we're on a tag or releases branch
+if git describe --exact-match --tags HEAD >/dev/null 2>&1 || git rev-parse --abbrev-ref HEAD | grep -q "^releases/"; then
+    # We are on a tag or releases branch, allow dist directory
+    exit 0
+else
+    # We are not on a tag or releases branch, check if dist is being committed
+    if git diff --cached --name-only | grep -q "^dist/"; then
+        echo "Error: 'dist' directory should only be committed on tags or release branches."
+        echo "Delete the dist directory and try committing again."
+        exit 1
+    fi
+fi

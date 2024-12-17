@@ -1,6 +1,6 @@
 {
   "name": "@sanity/template-validator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Sanity template validator for remote templates",
   "keywords": [],
   "homepage": "https://github.com/sanity-io/template-validator#readme",
@@ -36,7 +36,8 @@
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
     "package": "ncc build src/action.ts -o dist --no-source-map-register",
     "prepublishOnly": "npm run build",
-    "ts:check": "tsc --noEmit"
+    "ts:check": "tsc --noEmit",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*": [
@@ -61,6 +62,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "prettier": "^3.4.1"
   },
