@@ -1,9 +1,9 @@
 name: "Sanity Template Validator"
 description: "Validates Sanity.io template repositories"
 inputs:
-  repository:
-    description: "Repository to validate (owner/repo)"
-    required: true
+  directory:
+    description: "The directory to validate"
+    required: false
 runs:
   using: "node20"
   main: "dist/index.js"
