@@ -1,8 +1,6 @@
-export type {ValidationResult} from './types'
-export {
-  ENV_FILE,
-  ENV_TEMPLATE_FILES,
-  getMonoRepo,
-  REQUIRED_ENV_VAR,
-  validateSanityTemplate,
-} from './validator'
+export {validateLocal} from './local'
+export {ENV_FILE, ENV_TEMPLATE_FILES, REQUIRED_ENV_VAR} from './utils/constants'
+export type {FileReader} from './utils/fileReader'
+export {GitHubFileReader, LocalFileReader} from './utils/fileReader'
+export type {ValidationResult} from './utils/types'
+export {getMonoRepo, validateSanityTemplate} from './utils/validator'
