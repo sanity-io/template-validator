@@ -71,7 +71,7 @@ import {validateLocalTemplate, validateRemoteTemplate} from '@sanity/template-va
 
 // Validate a local directory
 async function validateLocal() {
-  const result = await validateRemoteTemplate('/path/to/template')
+  const result = await validateLocalTemplate('/path/to/template')
 
   if (result.isValid) {
     console.log('Template is valid!')
