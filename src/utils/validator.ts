@@ -1,34 +1,13 @@
+import {join} from 'node:path'
+
 import {parse as parseYaml} from 'yaml'
 
-import type {ValidationResult} from './types'
+import {ENV_TEMPLATE_FILES, REQUIRED_ENV_VAR} from './constants'
+import type {FileReader} from './fileReader'
+import type {PackageJson, ValidationResult} from './types'
 
 /** @public */
-export const REQUIRED_ENV_VAR = {
-  PROJECT_ID: /SANITY(?:_STUDIO)?_PROJECT_ID/,
-  DATASET: /SANITY(?:_STUDIO)?_DATASET/,
-} as const
-
-/** @public */
-export const ENV_FILE = {
-  TEMPLATE: '.env.template',
-  EXAMPLE: '.env.example',
-  LOCAL_EXAMPLE: '.env.local.example',
-  LOCAL_TEMPLATE: '.env.local.template',
-} as const
-
-/** @public */
-export const ENV_TEMPLATE_FILES = [
-  ENV_FILE.TEMPLATE,
-  ENV_FILE.EXAMPLE,
-  ENV_FILE.LOCAL_EXAMPLE,
-  ENV_FILE.LOCAL_TEMPLATE,
-] as const
-
-/** @public */
-export async function getMonoRepo(
-  baseUrl: string,
-  headers: Record<string, string> = {},
-): Promise<string[] | undefined> {
+export async function getMonoRepo(fileReader: FileReader): Promise<string[] | undefined> {
   const handlers = {
     'package.json': {
       check: (content: string) => {
@@ -75,8 +54,8 @@ export async function getMonoRepo(
 
   const fileChecks = await Promise.all(
     Object.keys(handlers).map(async (file) => {
-      const response = await fetch(`${baseUrl}/${file}`, {headers})
-      return {file, exists: response.status === 200, content: await response.text()}
+      const result = await fileReader.readFile(file)
+      return {file, ...result}
     }),
   )
 
@@ -89,10 +68,10 @@ export async function getMonoRepo(
   return undefined
 }
 
+/** @public */
 async function validatePackage(
-  baseUrl: string,
+  fileReader: FileReader,
   packagePath: string,
-  headers: Record<string, string>,
 ): Promise<{
   hasSanityConfig: boolean
   hasSanityCli: boolean
@@ -101,7 +80,6 @@ async function validatePackage(
   errors: string[]
 }> {
   const errors: string[] = []
-  const packageUrl = packagePath ? `${baseUrl}/${packagePath}` : baseUrl
 
   const requiredFiles = [
     'package.json',
@@ -114,8 +92,9 @@ async function validatePackage(
 
   const fileChecks = await Promise.all(
     requiredFiles.map(async (file) => {
-      const response = await fetch(`${packageUrl}/${file}`, {headers})
-      return {file, exists: response.status === 200, content: await response.text()}
+      const filePath = packagePath ? join(packagePath, file) : file
+      const result = await fileReader.readFile(filePath)
+      return {file, ...result}
     }),
   )
 
@@ -127,8 +106,8 @@ async function validatePackage(
   let hasSanityDep = false
   if (packageJson?.exists) {
     try {
-      const pkg = JSON.parse(packageJson.content)
-      hasSanityDep = !!(pkg.dependencies?.sanity || pkg.devDependencies?.sanity)
+      const pkg: PackageJson = JSON.parse(packageJson.content)
+      hasSanityDep = Boolean(pkg.dependencies?.['sanity'] || pkg.devDependencies?.['sanity'])
     } catch {
       errors.push(`Invalid package.json file in ${packagePath || 'root'}`)
     }
@@ -173,18 +152,16 @@ async function validatePackage(
 }
 
 /** @public */
-export async function validateSanityTemplate(
-  baseUrl: string,
+export async function validateTemplate(
+  fileReader: FileReader,
   packages: string[] = [''],
-  headers: Record<string, string> = {},
 ): Promise<ValidationResult> {
   const errors: string[] = []
-  const validations = await Promise.all(
-    packages.map((pkg) => validatePackage(baseUrl, pkg, headers)),
-  )
+  const validations = await Promise.all(packages.map((pkg) => validatePackage(fileReader, pkg)))
 
-  // Collect all package-level errors
-  validations.forEach((v) => errors.push(...v.errors))
+  for (const v of validations) {
+    errors.push(...v.errors)
+  }
 
   const hasSanityDep = validations.some((v) => v.hasSanityDep)
   if (!hasSanityDep) {
@@ -204,9 +181,9 @@ export async function validateSanityTemplate(
   const missingEnvPackages = packages.filter((_, i) => !validations[i].hasEnvFile)
   if (missingEnvPackages.length > 0) {
     errors.push(
-      `The following packages are missing .env.template, .env.example, or .env.local.example files: ${missingEnvPackages.join(
-        ', ',
-      )}`,
+      `The following packages are missing .env.template, .env.example, or .env.local.example files: ${missingEnvPackages
+        .map((p) => p || 'root')
+        .join(', ')}`,
     )
   }
 

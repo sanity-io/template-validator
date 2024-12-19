@@ -15,13 +15,6 @@ export interface PackageJson {
   repository?: {type: string; url: string}
 }
 
-export type RepoInfo = {
-  username: string
-  name: string
-  branch: string
-  filePath: string
-}
-
 /** @public */
 export type ValidationResult = {
   isValid: boolean
