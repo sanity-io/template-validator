@@ -1,6 +1,6 @@
 {
   "name": "@sanity/template-validator",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Sanity template validator for remote templates",
   "keywords": [],
   "homepage": "https://github.com/sanity-io/template-validator#readme",
@@ -27,7 +27,8 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "sanity-template-validate": "./dist/cli.cjs"
+    "sanity-template-validate": "./dist/cli.cjs",
+    "template-validator": "./dist/cli.cjs"
   },
   "files": [
     "dist",

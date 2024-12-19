@@ -28,11 +28,17 @@ pnpm add @sanity/template-validator
 The package includes a CLI tool that can validate local directories:
 
 ```bash
+# Install globally
+npm install -g @sanity/template-validator
+
 # Validate current directory
-npx sanity-template-validate
+sanity-template-validate
 
 # Validate specific directory
-npx sanity-template-validate path/to/template
+sanity-template-validate path/to/template
+
+# Using Npx
+npx @sanity/template-validator
 ```
 
 #### Adding as a Dev Dependency
