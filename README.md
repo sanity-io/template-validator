@@ -61,16 +61,22 @@ npm run validate
 ### As a Node.js Dependency
 
 ```typescript
-import {validateSanityTemplate, getMonoRepo} from '@sanity/template-validator'
+import {validateLocalTemplate, validateRemoteTemplate} from '@sanity/template-validator'
 
-async function validateMyTemplate() {
+// Validate a local directory
+async function validateLocal() {
+  try {
+    await validateLocalTemplate('/path/to/template')
+    console.log('Template is valid!')
+  } catch (error) {
+    console.error('Validation failed:', error)
+  }
+}
+
+// Validate a remote repository
+async function validateRemote() {
   const baseUrl = 'https://raw.githubusercontent.com/owner/repo/branch'
-
-  // Optional: Check if it's a monorepo
-  const packages = await getMonoRepo(baseUrl) || ['']
-
-  // Validate the template
-  const result = await validateSanityTemplate(baseUrl, packages)
+  const result = await validateRemoteTemplate(baseUrl)
 
   if (result.isValid) {
     console.log('Template is valid!')
@@ -78,18 +84,15 @@ async function validateMyTemplate() {
     console.error('Validation failed:', result.errors)
   }
 }
-```
 
-### Local Directory Validation
+// Advanced usage with FileReader
+import {LocalFileReader, getMonoRepo} from '@sanity/template-validator'
 
-```typescript
-import {validateLocal} from '@sanity/template-validator'
-
-// Validate current directory
-await validateLocal(process.cwd())
-
-// Validate specific directory
-await validateLocal('/path/to/template')
+async function advancedValidation() {
+  const fileReader = new LocalFileReader('/path/to/template')
+  const packages = await getMonoRepo(fileReader)
+  // Use packages for further processing
+}
 ```
 
 ### As a GitHub Action
@@ -109,21 +112,30 @@ jobs:
 
 ## API Reference
 
-### `validateSanityTemplate`
+### `validateLocalTemplate`
 
-Validates a Sanity template repository against required criteria.
+Validates a local Sanity template directory.
 
 ```typescript
-async function validateSanityTemplate(
+async function validateLocalTemplate(directory: string): Promise<void>
+```
+
+Parameters:
+- `directory`: Path to the template directory
+
+### `validateRemoteTemplate`
+
+Validates a remote Sanity template repository.
+
+```typescript
+async function validateRemoteTemplate(
   baseUrl: string,
-  packages?: string[],
   headers?: Record<string, string>
 ): Promise<ValidationResult>
 ```
 
 Parameters:
 - `baseUrl`: The base URL to the raw repository content
-- `packages`: Array of package paths for monorepos (optional)
 - `headers`: Custom headers for API requests (optional)
 
 Returns:
@@ -134,24 +146,29 @@ type ValidationResult = {
 }
 ```
 
-### `getMonoRepo`
+### File Readers
 
-Detects if a repository is a monorepo by examining common configuration files.
+The package provides two file reader classes for advanced usage:
 
 ```typescript
-async function getMonoRepo(
-  baseUrl: string,
-  headers?: Record<string, string>
-): Promise<string[] | undefined>
+class LocalFileReader implements FileReader {
+  constructor(basePath: string)
+  readFile(filePath: string): Promise<{exists: boolean; content: string}>
+}
+
+class GitHubFileReader implements FileReader {
+  constructor(baseUrl: string, headers?: Record<string, string>)
+  readFile(filePath: string): Promise<{exists: boolean; content: string}>
+}
 ```
 
-Parameters:
-- `baseUrl`: The base URL to the raw repository content
-- `headers`: Custom headers for API requests (optional)
+### `getMonoRepo`
 
-Returns:
-- An array of package paths if it's a monorepo
-- `undefined` if it's not a monorepo
+Helper function to detect monorepo configuration.
+
+```typescript
+async function getMonoRepo(fileReader: FileReader): Promise<string[] | undefined>
+```
 
 ## Validation Rules
 

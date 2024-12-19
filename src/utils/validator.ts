@@ -1,9 +1,10 @@
 import {join} from 'node:path'
+
 import {parse as parseYaml} from 'yaml'
 
 import {ENV_TEMPLATE_FILES, REQUIRED_ENV_VAR} from './constants'
 import type {FileReader} from './fileReader'
-import type {ValidationResult} from './types'
+import type {PackageJson, ValidationResult} from './types'
 
 /** @public */
 export async function getMonoRepo(fileReader: FileReader): Promise<string[] | undefined> {
@@ -105,8 +106,8 @@ async function validatePackage(
   let hasSanityDep = false
   if (packageJson?.exists) {
     try {
-      const pkg = JSON.parse(packageJson.content)
-      hasSanityDep = !!(pkg.dependencies?.sanity || pkg.devDependencies?.sanity)
+      const pkg: PackageJson = JSON.parse(packageJson.content)
+      hasSanityDep = Boolean(pkg.dependencies?.['sanity'] || pkg.devDependencies?.['sanity'])
     } catch {
       errors.push(`Invalid package.json file in ${packagePath || 'root'}`)
     }
@@ -151,7 +152,7 @@ async function validatePackage(
 }
 
 /** @public */
-export async function validateSanityTemplate(
+export async function validateTemplate(
   fileReader: FileReader,
   packages: string[] = [''],
 ): Promise<ValidationResult> {

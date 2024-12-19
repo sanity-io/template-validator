@@ -1,35 +1,10 @@
-import path from 'node:path'
-
 import {LocalFileReader} from './utils/fileReader'
-import {getMonoRepo, validateSanityTemplate} from './utils/validator'
+import type {ValidationResult} from './utils/types'
+import {getMonoRepo, validateTemplate} from './utils/validator'
 
 /** @public */
-async function validateLocal(directory: string): Promise<void> {
+export async function validateLocalTemplate(directory: string): Promise<ValidationResult> {
   const fileReader = new LocalFileReader(directory)
-
-  try {
-    const packages = (await getMonoRepo(fileReader)) || ['']
-    const result = await validateSanityTemplate(fileReader, packages)
-
-    if (!result.isValid) {
-      console.error('Validation failed:')
-      for (const error of result.errors) {
-        console.error(`- ${error}`)
-      }
-      process.exit(1)
-    } else {
-      console.log('Validation successful!')
-    }
-  } catch (error) {
-    console.error('Validation failed:', error)
-    process.exit(1)
-  }
+  const packages = (await getMonoRepo(fileReader)) || ['']
+  return validateTemplate(fileReader, packages)
 }
-
-// When running directly
-if (require.main === module) {
-  const directory = process.argv[2] || process.cwd()
-  validateLocal(path.resolve(directory))
-}
-
-export {validateLocal}
