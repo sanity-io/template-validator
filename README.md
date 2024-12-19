@@ -65,11 +65,12 @@ import {validateLocalTemplate, validateRemoteTemplate} from '@sanity/template-va
 
 // Validate a local directory
 async function validateLocal() {
-  try {
-    await validateLocalTemplate('/path/to/template')
+  const result = await validateRemoteTemplate('/path/to/template')
+
+  if (result.isValid) {
     console.log('Template is valid!')
-  } catch (error) {
-    console.error('Validation failed:', error)
+  } else {
+    console.error('Validation failed:', result.errors)
   }
 }
 
@@ -117,7 +118,7 @@ jobs:
 Validates a local Sanity template directory.
 
 ```typescript
-async function validateLocalTemplate(directory: string): Promise<void>
+async function validateLocalTemplate(directory: string): Promise<ValidationResult>
 ```
 
 Parameters:
