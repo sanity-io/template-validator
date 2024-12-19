@@ -1,10 +1,12 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
+/** @public */
 export interface FileReader {
   readFile(filePath: string): Promise<{exists: boolean; content: string}>
 }
 
+/** @public */
 export class GitHubFileReader implements FileReader {
   constructor(
     private baseUrl: string,
@@ -20,6 +22,7 @@ export class GitHubFileReader implements FileReader {
   }
 }
 
+/** @public */
 export class LocalFileReader implements FileReader {
   constructor(private basePath: string) {}
 

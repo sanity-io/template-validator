@@ -3,6 +3,7 @@ import path from 'node:path'
 import {LocalFileReader} from './utils/fileReader'
 import {getMonoRepo, validateSanityTemplate} from './utils/validator'
 
+/** @public */
 async function validateLocal(directory: string): Promise<void> {
   const fileReader = new LocalFileReader(directory)
 
@@ -12,7 +13,9 @@ async function validateLocal(directory: string): Promise<void> {
 
     if (!result.isValid) {
       console.error('Validation failed:')
-      result.errors.forEach((error) => console.error(`- ${error}`))
+      for (const error of result.errors) {
+        console.error(`- ${error}`)
+      }
       process.exit(1)
     } else {
       console.log('Validation successful!')

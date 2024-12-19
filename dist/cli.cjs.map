@@ -1,0 +1,1 @@
+{"version":3,"file":"cli.cjs","sources":["../src/cli.ts"],"sourcesContent":["#!/usr/bin/env node\n\nimport {validateLocal} from './local'\n\nconst directory = process.argv[2] || process.cwd()\nvalidateLocal(directory)\n"],"names":["validateLocal"],"mappings":";;;AAIA,MAAM,YAAY,QAAQ,KAAK,CAAC,KAAK,QAAQ,IAAI;AACjDA,MAAA,cAAc,SAAS;"}

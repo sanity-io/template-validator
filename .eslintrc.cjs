@@ -15,7 +15,6 @@ module.exports = {
   },
   plugins: ['import', 'simple-import-sort', 'prettier'],
   rules: {
-    'no-console': 'error',
     'no-shadow': 'error',
     'no-warning-comments': [
       'warn',

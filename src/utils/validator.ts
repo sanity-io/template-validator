@@ -1,3 +1,4 @@
+import {join} from 'node:path'
 import {parse as parseYaml} from 'yaml'
 
 import {ENV_TEMPLATE_FILES, REQUIRED_ENV_VAR} from './constants'
@@ -90,7 +91,8 @@ async function validatePackage(
 
   const fileChecks = await Promise.all(
     requiredFiles.map(async (file) => {
-      const result = await fileReader.readFile(file)
+      const filePath = packagePath ? join(packagePath, file) : file
+      const result = await fileReader.readFile(filePath)
       return {file, ...result}
     }),
   )
@@ -156,7 +158,9 @@ export async function validateSanityTemplate(
   const errors: string[] = []
   const validations = await Promise.all(packages.map((pkg) => validatePackage(fileReader, pkg)))
 
-  validations.forEach((v) => errors.push(...v.errors))
+  for (const v of validations) {
+    errors.push(...v.errors)
+  }
 
   const hasSanityDep = validations.some((v) => v.hasSanityDep)
   if (!hasSanityDep) {
@@ -176,9 +180,9 @@ export async function validateSanityTemplate(
   const missingEnvPackages = packages.filter((_, i) => !validations[i].hasEnvFile)
   if (missingEnvPackages.length > 0) {
     errors.push(
-      `The following packages are missing .env.template, .env.example, or .env.local.example files: ${missingEnvPackages.join(
-        ', ',
-      )}`,
+      `The following packages are missing .env.template, .env.example, or .env.local.example files: ${missingEnvPackages
+        .map((p) => p || 'root')
+        .join(', ')}`,
     )
   }
 
