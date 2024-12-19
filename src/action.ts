@@ -1,7 +1,8 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-import {getMonoRepo, validateSanityTemplate} from './validator'
+import {GitHubFileReader} from './utils/fileReader'
+import {getMonoRepo, validateSanityTemplate} from './utils/validator'
 
 async function run(): Promise<void> {
   try {
@@ -10,8 +11,9 @@ async function run(): Promise<void> {
     const directory = core.getInput('directory', {required: false}) || ''
     const baseUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${directory}`
 
-    const packages = (await getMonoRepo(baseUrl)) || ['']
-    const result = await validateSanityTemplate(baseUrl, packages)
+    const fileReader = new GitHubFileReader(baseUrl)
+    const packages = (await getMonoRepo(fileReader)) || ['']
+    const result = await validateSanityTemplate(fileReader, packages)
 
     if (!result.isValid) {
       core.setFailed(result.errors.join('\n'))
