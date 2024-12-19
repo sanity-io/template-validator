@@ -6,9 +6,10 @@ A validation utility for Sanity.io template repositories. Use it as a dependency
 
 - Validates Sanity.io template structure and requirements
 - Supports monorepo detection and validation
-- Can be used as a Node.js dependency or GitHub Action
+- Can be used as a Node.js dependency, GitHub Action, or CLI tool
 - Validates environment variables and configuration files
 - TypeScript support with full type definitions
+- Local directory validation support
 
 ## Installation
 
@@ -21,6 +22,41 @@ pnpm add @sanity/template-validator
 ```
 
 ## Usage
+
+### As a CLI Tool
+
+The package includes a CLI tool that can validate local directories:
+
+```bash
+# Validate current directory
+npx sanity-template-validate
+
+# Validate specific directory
+npx sanity-template-validate path/to/template
+```
+
+#### Adding as a Dev Dependency
+
+The recommended way to use the validator in your template project is to add it as a dev dependency and create a validation script:
+
+1. Add to your project:
+```bash
+npm install --save-dev @sanity/template-validator
+```
+
+2. Add a script to your `package.json`:
+```json
+{
+  "scripts": {
+    "validate": "sanity-template-validate"
+  }
+}
+```
+
+3. Run the validation:
+```bash
+npm run validate
+```
 
 ### As a Node.js Dependency
 
@@ -42,6 +78,18 @@ async function validateMyTemplate() {
     console.error('Validation failed:', result.errors)
   }
 }
+```
+
+### Local Directory Validation
+
+```typescript
+import {validateLocal} from '@sanity/template-validator'
+
+// Validate current directory
+await validateLocal(process.cwd())
+
+// Validate specific directory
+await validateLocal('/path/to/template')
 ```
 
 ### As a GitHub Action
