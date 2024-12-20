@@ -55,7 +55,7 @@ describe('Template Validator', () => {
       const packages = await getMonoRepo(fileReader)
 
       expect(packages).toBeDefined()
-      expect(packages).toEqual(['app', 'astro-app'])
+      expect(packages?.sort()).toEqual(['astro-app', 'studio'].sort())
     })
   })
 })
