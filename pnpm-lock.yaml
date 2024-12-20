@@ -17,9 +17,6 @@ importers:
       '@sanity/pkg-utils':
         specifier: ^6.12.2
         version: 6.12.2(@types/node@22.10.2)(typescript@5.7.2)
-      typescript:
-        specifier: ^5.7.2
-        version: 5.7.2
       yaml:
         specifier: ^2.6.1
         version: 2.6.1
@@ -57,6 +54,9 @@ importers:
       prettier:
         specifier: ^3.4.1
         version: 3.4.2
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
       vitest:
         specifier: ^2.1.8
         version: 2.1.8(@types/node@22.10.2)(terser@5.37.0)

@@ -55,7 +55,6 @@
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
     "@sanity/pkg-utils": "^6.12.2",
-    "typescript": "^5.7.2",
     "yaml": "^2.6.1"
   },
   "devDependencies": {
@@ -70,6 +69,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "prettier": "^3.4.1",
+    "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   },
   "engines": {
