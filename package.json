@@ -1,6 +1,6 @@
 {
   "name": "@sanity/template-validator",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Sanity template validator for remote templates",
   "keywords": [],
   "homepage": "https://github.com/sanity-io/template-validator#readme",
@@ -41,7 +41,7 @@
     "package": "ncc build src/action.ts -o dist --no-source-map-register",
     "prepare": "husky",
     "prepublishOnly": "npm run build",
-    "test": "vitest",
+    "test": "vitest run",
     "ts:check": "tsc --noEmit"
   },
   "lint-staged": {
