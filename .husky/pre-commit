@@ -1,5 +1,7 @@
 #!/bin/sh
 
+npm run test
+
 # Check if we're on a tag or releases branch
 if git describe --exact-match --tags HEAD >/dev/null 2>&1 || git rev-parse --abbrev-ref HEAD | grep -q "^releases/"; then
     # We are on a tag or releases branch, allow dist directory
