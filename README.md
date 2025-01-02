@@ -114,7 +114,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate Sanity Template
-        uses: sanity-io/template-validator@v0.1.6
+        uses: sanity-io/template-validator@v2
 ```
 
 ## API Reference
