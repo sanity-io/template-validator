@@ -21,6 +21,8 @@ describe('Template Validator', () => {
       const packages = await getMonoRepo(fileReader)
       const result = await validateTemplate(fileReader, packages)
 
+      console.log(result)
+
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)
     })

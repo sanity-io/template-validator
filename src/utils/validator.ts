@@ -178,13 +178,11 @@ export async function validateTemplate(
     errors.push('At least one package must include a sanity.cli.js or sanity.cli.ts file')
   }
 
-  const missingEnvPackages = packages.filter((_, i) => !validations[i].hasEnvFile)
-  if (missingEnvPackages.length > 0) {
-    errors.push(
-      `The following packages are missing .env.template, .env.example, or .env.local.example files: ${missingEnvPackages
-        .map((p) => p || 'root')
-        .join(', ')}`,
-    )
+  const packagesWithMissingEnvFile = packages.filter((_, i) => !validations[i].hasEnvFile)
+  if (packagesWithMissingEnvFile.length > 0) {
+    const envOptionsString = ENV_TEMPLATE_FILES.join(', ')
+    const packagesString = packagesWithMissingEnvFile.map((p) => p || 'root').join(', ')
+    errors.push(`Missing env template file [${envOptionsString}] in packages: ${packagesString}`)
   }
 
   return {
