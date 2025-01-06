@@ -1,4 +1,4 @@
-name: Test
+name: Test Validator
 
 on:
   pull_request:
