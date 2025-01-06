@@ -184,7 +184,7 @@ A valid Sanity template must meet the following criteria:
 ### For Single-Package Repositories:
 - Must have a valid `package.json` with 'sanity' dependency
 - Must have `sanity.config.js/ts` and `sanity.cli.js/ts`
-- Must have one of: `.env.template`, `.env.example`, or `.env.local.example`
+- Must have one of: `.env.template`, `.env.example`, `.env.local.template`, or `.env.local.example`
 
 ### For Monorepos:
 - Each package must have a valid `package.json`
