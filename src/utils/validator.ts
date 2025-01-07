@@ -135,11 +135,10 @@ async function validatePackage(
       )
     }
 
-    const missingVars = Object.entries(REQUIRED_ENV_VAR).filter((obj) => !envContent.match(obj[1]))
-    if (missingVars.length > 0) {
-      errors.push(
-        `Environment template in ${packageName} must include the following variables: ${missingVars.map(([name]) => name).join(', ')}`,
-      )
+    for (const [name, pattern] of Object.entries(REQUIRED_ENV_VAR)) {
+      if (!envContent.match(pattern)) {
+        errors.push(`Environment template in ${packageName} is missing required variable: ${name}`)
+      }
     }
   }
 
