@@ -79,6 +79,7 @@ async function validatePackage(
   hasSanityDep: boolean
   errors: string[]
 }> {
+  const packageName = packagePath || 'root package'
   const errors: string[] = []
 
   const requiredFiles = [
@@ -100,7 +101,7 @@ async function validatePackage(
 
   const packageJson = fileChecks.find((f) => f.file === 'package.json')
   if (!packageJson?.exists) {
-    errors.push(`Package at ${packagePath || 'root'} must include a package.json file`)
+    errors.push(`Package at ${packageName} must include a package.json file`)
   }
 
   let hasSanityDep = false
@@ -109,7 +110,7 @@ async function validatePackage(
       const pkg: PackageJson = JSON.parse(packageJson.content)
       hasSanityDep = Boolean(pkg.dependencies?.['sanity'] || pkg.devDependencies?.['sanity'])
     } catch {
-      errors.push(`Invalid package.json file in ${packagePath || 'root'}`)
+      errors.push(`Invalid package.json file in ${packageName}`)
     }
   }
 
@@ -127,17 +128,17 @@ async function validatePackage(
 
   if (envFile) {
     const envContent = envFile.content
-    const hasProjectId = envContent.match(REQUIRED_ENV_VAR.PROJECT_ID)
-    const hasDataset = envContent.match(REQUIRED_ENV_VAR.DATASET)
-
-    if (!hasProjectId || !hasDataset) {
-      const missing = []
-      if (!hasProjectId) missing.push('SANITY_PROJECT_ID or SANITY_STUDIO_PROJECT_ID')
-      if (!hasDataset) missing.push('SANITY_DATASET or SANITY_STUDIO_DATASET')
+    const hasSpacesBeforeEqual = /\w+\s+=/.test(envContent)
+    if (hasSpacesBeforeEqual) {
       errors.push(
-        `Environment template in ${
-          packagePath || 'repo'
-        } must include the following variables: ${missing.join(', ')}`,
+        `Environment template in ${packageName} contains invalid environment variable syntax. Please see https://dotenvx.com/docs/env-file for proper formatting.`,
+      )
+    }
+
+    const missingVars = Object.entries(REQUIRED_ENV_VAR).filter((obj) => !envContent.match(obj[1]))
+    if (missingVars.length > 0) {
+      errors.push(
+        `Environment template in ${packageName} must include the following variables: ${missingVars.map(([name]) => name).join(', ')}`,
       )
     }
   }
