@@ -201,9 +201,7 @@ export async function validateTemplate(
   const missingTemplatesStr = missingEnvTemplates.join(', ')
   if (missingEnvTemplates.length) {
     errors.push(`Missing env template in packages: ${missingTemplatesStr}. [${envExamples}]`)
-  }
-
-  if (!validations.some((v) => v.hasEnvFile)) {
+  } else if (!validations.some((v) => v.hasEnvFile)) {
     errors.push(`At least one package must include an env template file [${envExamples}]`)
   }
 
