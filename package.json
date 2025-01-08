@@ -1,6 +1,6 @@
 {
   "name": "@sanity/template-validator",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Sanity template validator for remote templates",
   "keywords": [],
   "homepage": "https://github.com/sanity-io/template-validator#readme",

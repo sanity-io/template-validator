@@ -120,7 +120,11 @@ async function validatePackage(
   if (packageJson?.exists) {
     try {
       const pkg: PackageJson = JSON.parse(packageJson.content)
-      hasSanityDep = Boolean(pkg.dependencies?.['sanity'] || pkg.devDependencies?.['sanity'])
+      hasSanityDep = Boolean(
+        pkg.dependencies?.['sanity'] ||
+          pkg.dependencies?.['next-sanity'] ||
+          pkg.dependencies?.['@sanity/client'],
+      )
     } catch {
       errors.push(`Invalid package.json file in ${packageName}`)
     }
@@ -190,11 +194,15 @@ export async function validateTemplate(
     errors.push('At least one package must include a sanity.cli.js or sanity.cli.ts file')
   }
 
-  const packagesWithMissingEnvFile = packages.filter((_, i) => !validations[i].hasEnvFile)
-  if (packagesWithMissingEnvFile.length > 0) {
-    const envOptionsString = ENV_TEMPLATE_FILES.join(', ')
-    const packagesString = packagesWithMissingEnvFile.map((p) => p || 'root').join(', ')
-    errors.push(`Missing env template file [${envOptionsString}] in packages: ${packagesString}`)
+  const envExamples = ENV_TEMPLATE_FILES.join(', ')
+  const sanityPackagesWithoutEnv = validations.filter((v) => v.hasSanityDep && !v.hasEnvFile)
+  if (sanityPackagesWithoutEnv.length) {
+    errors.push(`Packages using Sanity must include an env template file [${envExamples}]`)
+  }
+
+  const hasAnyEnvFile = validations.some((v) => v.hasEnvFile)
+  if (!hasAnyEnvFile) {
+    errors.push(`At least one package must include an env template file [${envExamples}]`)
   }
 
   return {
