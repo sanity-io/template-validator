@@ -8,40 +8,52 @@ import type {PackageJson, ValidationResult} from './types'
 
 /** @public */
 export async function getMonoRepo(fileReader: FileReader): Promise<string[] | undefined> {
+  const expandWildcards = async (patterns: string[]): Promise<string[]> => {
+    return Promise.all(
+      patterns.map(async (pattern) => {
+        if (!pattern.includes('*')) return pattern.replace(/\/$/, '')
+        const baseDir = pattern.split('/*')[0].replace(/\/$/, '')
+        const contents = await fileReader.readDir(baseDir).catch(() => [])
+        return contents.map((dir) => join(baseDir, dir))
+      }),
+    ).then((results) => results.flat())
+  }
+
   const handlers = {
     'package.json': {
-      check: (content: string) => {
+      check: async (content: string) => {
         try {
           const pkg = JSON.parse(content)
           if (!pkg.workspaces) return undefined
-          return Array.isArray(pkg.workspaces) ? pkg.workspaces : pkg.workspaces.packages
+          const patterns = Array.isArray(pkg.workspaces) ? pkg.workspaces : pkg.workspaces.packages
+          return patterns ? await expandWildcards(patterns) : undefined
         } catch {
           return undefined
         }
       },
     },
     'pnpm-workspace.yaml': {
-      check: (content: string) => {
+      check: async (content: string) => {
         try {
           const config = parseYaml(content)
-          return config.packages
+          return config.packages ? await expandWildcards(config.packages) : undefined
         } catch {
           return undefined
         }
       },
     },
     'lerna.json': {
-      check: (content: string) => {
+      check: async (content: string) => {
         try {
           const config = JSON.parse(content)
-          return config.packages
+          return config.packages ? await expandWildcards(config.packages) : undefined
         } catch {
           return undefined
         }
       },
     },
     'rush.json': {
-      check: (content: string) => {
+      check: async (content: string) => {
         try {
           const config = JSON.parse(content)
           return config.projects?.map((p: {packageName: string}) => p.packageName)
@@ -61,7 +73,7 @@ export async function getMonoRepo(fileReader: FileReader): Promise<string[] | un
 
   for (const check of fileChecks) {
     if (!check.exists) continue
-    const result = handlers[check.file as keyof typeof handlers].check(check.content)
+    const result = await handlers[check.file as keyof typeof handlers].check(check.content)
     if (result) return result
   }
 

@@ -1,0 +1,7 @@
+{
+  "name": "pnpm-wildcard-monorepo",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

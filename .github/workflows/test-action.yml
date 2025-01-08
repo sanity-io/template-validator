@@ -9,4 +9,4 @@ jobs:
       - name: Validate Sanity Template with GitHub Action
         uses: sanity-io/template-validator@v2
         with:
-          directory: "test/fixtures/test-template"
+          directory: "test/fixtures/npm-workspace-monorepo"

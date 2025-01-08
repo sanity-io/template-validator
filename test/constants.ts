@@ -1,5 +1,10 @@
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
+import {join, dirname} from 'node:path'
+import * as github from '@actions/github'
 
-export const LOCAL_TEST_TEMPLATE = path.join(__dirname, 'fixtures/test-template')
-export const REMOTE_TEST_TEMPLATE =
-  'https://raw.githubusercontent.com/sanity-io/template-validator/main/test/fixtures/test-template'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const branch = github?.context?.payload?.pull_request?.head?.ref ?? 'main'
+
+export const LOCAL_FIXTURES = join(__dirname, 'fixtures')
+export const REMOTE_FIXTURES = `https://raw.githubusercontent.com/sanity-io/template-validator/${branch}/test/fixtures`
