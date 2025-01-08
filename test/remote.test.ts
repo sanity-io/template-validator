@@ -7,11 +7,9 @@ import {REMOTE_FIXTURES} from './constants'
 describe('Remote Template Tests', () => {
   describe('npm-workspace-monorepo', () => {
     const fileReader = new GitHubFileReader(`${REMOTE_FIXTURES}/npm-workspace-monorepo`)
-    console.log('REMOTE_FIXTURES', REMOTE_FIXTURES)
 
     it('should validate template using helper successfully', async () => {
       const result = await validateRemoteTemplate(`${REMOTE_FIXTURES}/npm-workspace-monorepo`)
-      console.log('REMOTE_FIXTURES', REMOTE_FIXTURES)
 
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)

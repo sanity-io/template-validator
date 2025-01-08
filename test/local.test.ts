@@ -10,7 +10,7 @@ describe('Local Template Tests', () => {
 
     it('should validate template using helper successfully', async () => {
       const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/npm-workspace-monorepo`)
-
+      console.log('REMOTE_FIXTURES', REMOTE_FIXTURES)
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)
     })
