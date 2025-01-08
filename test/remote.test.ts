@@ -11,7 +11,7 @@ describe('Remote Template Tests', () => {
     it('should validate template using helper successfully', async () => {
       const result = await validateRemoteTemplate(`${REMOTE_FIXTURES}/npm-workspace-monorepo`)
       if (!result.isValid) {
-        console.debug('Validation failed with errors:', result)
+        console.debug('Validation failed with errors:', result.errors)
       }
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)
@@ -21,7 +21,7 @@ describe('Remote Template Tests', () => {
       const packages = await getMonoRepo(fileReader)
       const result = await validateTemplate(fileReader, packages)
       if (!result.isValid) {
-        console.debug('Validation failed with errors:', result)
+        console.debug('Validation failed with errors:', result.errors)
       }
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)
@@ -41,7 +41,7 @@ describe('Remote Template Tests', () => {
     it('should validate template using helper successfully', async () => {
       const result = await validateRemoteTemplate(`${REMOTE_FIXTURES}/flat-repo`)
       if (!result.isValid) {
-        console.debug('Validation failed with errors:', result)
+        console.debug('Validation failed with errors:', result.errors)
       }
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)
@@ -51,7 +51,7 @@ describe('Remote Template Tests', () => {
       const packages = await getMonoRepo(fileReader)
       const result = await validateTemplate(fileReader, packages)
       if (!result.isValid) {
-        console.debug('Validation failed with errors:', result)
+        console.debug('Validation failed with errors:', result.errors)
       }
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)
@@ -95,7 +95,7 @@ describe('Remote Template Tests', () => {
     it('should validate template using helper successfully', async () => {
       const result = await validateRemoteTemplate(`${REMOTE_FIXTURES}/pnpm-wildcard-monorepo`)
       if (!result.isValid) {
-        console.debug('Validation failed with errors:', result)
+        console.debug('Validation failed with errors:', result.errors)
       }
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)
@@ -105,7 +105,7 @@ describe('Remote Template Tests', () => {
       const packages = await getMonoRepo(fileReader)
       const result = await validateTemplate(fileReader, packages)
       if (!result.isValid) {
-        console.debug('Validation failed with errors:', result)
+        console.debug('Validation failed with errors:', result.errors)
       }
       expect(result.isValid).toBe(true)
       expect(result.errors).toHaveLength(0)

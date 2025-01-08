@@ -2,7 +2,7 @@ import {join} from 'node:path'
 
 import {parse as parseYaml} from 'yaml'
 
-import {ENV_TEMPLATE_FILES, REQUIRED_ENV_VAR} from './constants'
+import {ENV_TEMPLATE_FILES, REQUIRED_ENV_VAR, ROOT_PACKAGE_NAME} from './constants'
 import type {FileReader} from './fileReader'
 import type {PackageJson, ValidationResult} from './types'
 
@@ -91,7 +91,7 @@ async function validatePackage(
   hasSanityDep: boolean
   errors: string[]
 }> {
-  const packageName = packagePath || 'root package'
+  const packageName = packagePath || ROOT_PACKAGE_NAME
   const errors: string[] = []
 
   const requiredFiles = [
@@ -194,14 +194,16 @@ export async function validateTemplate(
     errors.push('At least one package must include a sanity.cli.js or sanity.cli.ts file')
   }
 
+  const missingEnvTemplates = packages
+    .filter((_, i) => validations[i].hasSanityDep && !validations[i].hasEnvFile)
+    .map((p) => p || ROOT_PACKAGE_NAME)
   const envExamples = ENV_TEMPLATE_FILES.join(', ')
-  const sanityPackagesWithoutEnv = validations.filter((v) => v.hasSanityDep && !v.hasEnvFile)
-  if (sanityPackagesWithoutEnv.length) {
-    errors.push(`Packages using Sanity must include an env template file [${envExamples}]`)
+  const missingTemplatesStr = missingEnvTemplates.join(', ')
+  if (missingEnvTemplates.length) {
+    errors.push(`Missing env template in packages: ${missingTemplatesStr}. [${envExamples}]`)
   }
 
-  const hasAnyEnvFile = validations.some((v) => v.hasEnvFile)
-  if (!hasAnyEnvFile) {
+  if (!validations.some((v) => v.hasEnvFile)) {
     errors.push(`At least one package must include an env template file [${envExamples}]`)
   }
 

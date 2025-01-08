@@ -19,3 +19,6 @@ export const ENV_TEMPLATE_FILES = [
   ENV_FILE.LOCAL_EXAMPLE,
   ENV_FILE.LOCAL_TEMPLATE,
 ] as const
+
+/** @public */
+export const ROOT_PACKAGE_NAME = 'root package' as const
