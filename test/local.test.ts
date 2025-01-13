@@ -71,7 +71,7 @@ describe('Local Template Tests', () => {
       const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/invalid-repo`)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors.length).toBeGreaterThan(0)
+      expect(result.errors.length).toBe(4)
     })
 
     it('should fail validation', async () => {

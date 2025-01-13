@@ -71,7 +71,7 @@ describe('Remote Template Tests', () => {
       const result = await validateRemoteTemplate(`${REMOTE_FIXTURES}/invalid-repo`)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors.length).toBeGreaterThan(0)
+      expect(result.errors.length).toBe(4)
     })
 
     it('should fail validation', async () => {
@@ -115,7 +115,7 @@ describe('Remote Template Tests', () => {
       const packages = await getMonoRepo(fileReader)
 
       expect(packages).toBeDefined()
-      // expect(packages?.sort()).toEqual(['apps/app', 'apps/studio', 'packages/config'].sort())
+      expect(packages?.sort()).toEqual(['apps/app', 'apps/studio', 'packages/config'].sort())
     })
   })
 })
