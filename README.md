@@ -201,6 +201,7 @@ A valid Sanity template must meet the following criteria:
 | Input | Description | Required |
 |-------|-------------|----------|
 | `directory` | The directory to validate. Use this if you have multiple templates in a repository. | No |
+| `token` | GitHub token for accessing and validating private repositories. | No |
 
 ## Contributing
 
