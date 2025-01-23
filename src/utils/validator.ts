@@ -98,6 +98,7 @@ async function validatePackage(
     'package.json',
     'sanity.config.ts',
     'sanity.config.js',
+    'sanity.config.tsx',
     'sanity.cli.ts',
     'sanity.cli.js',
     ...ENV_TEMPLATE_FILES,
@@ -131,15 +132,18 @@ async function validatePackage(
   }
 
   const hasSanityConfig = fileChecks.some(
-    (f) => f.exists && (f.file === 'sanity.config.ts' || f.file === 'sanity.config.js'),
+    ({exists, file}) =>
+      exists &&
+      (file === 'sanity.config.ts' || file === 'sanity.config.js' || file === 'sanity.config.tsx'),
   )
 
   const hasSanityCli = fileChecks.some(
-    (f) => f.exists && (f.file === 'sanity.cli.ts' || f.file === 'sanity.cli.js'),
+    ({exists, file}) => exists && (file === 'sanity.cli.ts' || file === 'sanity.cli.js'),
   )
 
   const envFile = fileChecks.find(
-    (f) => f.exists && ENV_TEMPLATE_FILES.includes(f.file as (typeof ENV_TEMPLATE_FILES)[number]),
+    ({exists, file}) =>
+      exists && ENV_TEMPLATE_FILES.includes(file as (typeof ENV_TEMPLATE_FILES)[number]),
   )
 
   if (envFile) {
@@ -186,12 +190,12 @@ export async function validateTemplate(
 
   const hasSanityConfig = validations.some((v) => v.hasSanityConfig)
   if (!hasSanityConfig) {
-    errors.push('At least one package must include a sanity.config.js or sanity.config.ts file')
+    errors.push('At least one package must include a sanity.config.[js|ts|tsx] file')
   }
 
   const hasSanityCli = validations.some((v) => v.hasSanityCli)
   if (!hasSanityCli) {
-    errors.push('At least one package must include a sanity.cli.js or sanity.cli.ts file')
+    errors.push('At least one package must include a sanity.cli.[js|ts] file')
   }
 
   const missingEnvTemplates = packages
