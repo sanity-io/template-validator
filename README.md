@@ -1,7 +1,7 @@
 # Sanity Template Validator
 
-[![npm stat](https://img.shields.io/npm/dm/sanity/template-validator.svg?style=flat-square)](https://npm-stat.com/charts.html?package=sanity/template-validator)
-[![npm version](https://img.shields.io/npm/v/sanity/template-validator.svg?style=flat-square)](https://www.npmjs.com/package/sanity/template-validator)
+[![npm stat](https://img.shields.io/npm/dm/@sanity/template-validator.svg?style=flat-square)](https://npm-stat.com/charts.html?package=@sanity/template-validator)
+[![npm version](https://img.shields.io/npm/v/@sanity/template-validator.svg?style=flat-square)](https://www.npmjs.com/package/@sanity/template-validator)
 
 A validation utility for Sanity.io template repositories. Use it as a dependency in your projects or as a GitHub Action to ensure your Sanity templates meet the required standards.
 
