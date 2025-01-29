@@ -1,5 +1,8 @@
 # Sanity Template Validator
 
+[![npm stat](https://img.shields.io/npm/dm/groq-js.svg?style=flat-square)](https://npm-stat.com/charts.html?package=groq-js)
+[![npm version](https://img.shields.io/npm/v/groq-js.svg?style=flat-square)](https://www.npmjs.com/package/groq-js)
+
 A validation utility for Sanity.io template repositories. Use it as a dependency in your projects or as a GitHub Action to ensure your Sanity templates meet the required standards.
 
 ## Features
