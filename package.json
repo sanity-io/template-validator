@@ -55,10 +55,10 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
-    "@sanity/pkg-utils": "^6.12.2",
     "yaml": "^2.6.1"
   },
   "devDependencies": {
+    "@sanity/pkg-utils": "^6.12.2",
     "@sanity/prettier-config": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
