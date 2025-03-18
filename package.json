@@ -35,10 +35,10 @@
     "src"
   ],
   "scripts": {
-    "action:package": "npm i -D @sanity/pkg-utils && ncc build src/action.ts -o dist --no-source-map-register",
     "build": "pkg build --strict --clean --check",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
+    "package:action": "npm i -D @sanity/pkg-utils && ncc build src/action.ts -o dist --no-source-map-register",
     "prepare": "husky",
     "prepublishOnly": "npm run build",
     "postpublish": "rm -rf dist",
