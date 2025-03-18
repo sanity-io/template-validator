@@ -1,6 +1,6 @@
 {
   "name": "@sanity/template-validator",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "Sanity template validator for remote templates",
   "keywords": [],
   "homepage": "https://github.com/sanity-io/template-validator#readme",
@@ -58,7 +58,7 @@
     "yaml": "^2.6.1"
   },
   "devDependencies": {
-    "@sanity/pkg-utils": "^6.12.2",
+    "@sanity/pkg-utils": "^7.1.1",
     "@sanity/prettier-config": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
