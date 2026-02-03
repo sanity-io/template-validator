@@ -36,12 +36,11 @@
   ],
   "scripts": {
     "build": "pkg build --strict --clean --check",
+    "build:action": "ncc build src/action.ts -o dist/action --source-map --license licenses.txt -t",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "eslint . --ext .cjs,.js,.ts,.tsx",
-    "package:action": "npm i -D @sanity/pkg-utils && ncc build src/action.ts -o dist --no-source-map-register",
     "prepare": "husky",
-    "prepublishOnly": "npm run build",
-    "postpublish": "rm -rf dist",
+    "prepublishOnly": "pnpm run build",
     "test": "vitest run",
     "ts:check": "tsc --noEmit"
   },
@@ -60,6 +59,8 @@
   "devDependencies": {
     "@sanity/pkg-utils": "^7.1.1",
     "@sanity/prettier-config": "^1.0.3",
+    "@sanity/semantic-release-preset": "^5.0.0",
+    "@vercel/ncc": "^0.38.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.1",
@@ -71,6 +72,7 @@
     "lint-staged": "^15.2.10",
     "prettier": "^3.4.1",
     "prettier-plugin-packagejson": "^3.0.0",
+    "semantic-release": "^24.2.9",
     "typescript": "^5.9.3",
     "vitest": "^2.1.8"
   },
