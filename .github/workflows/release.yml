@@ -83,7 +83,10 @@ jobs:
       - name: Checkout release tag
         uses: actions/checkout@v4
         with:
-          ref: v${{ needs.release.outputs.new-release-version }}
+          # We need to use the tag created by semantic-release, which is prefixed
+          # with "sr-" (semantic release) to avoid conflicting with the tag/branch
+          # naming of GitHub actions, created below - which includes the built bundle.
+          ref: sr-v${{ needs.release.outputs.new-release-version }}
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup Node.js
