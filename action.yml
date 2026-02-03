@@ -4,6 +4,9 @@ inputs:
   directory:
     description: "The directory to validate"
     required: false
+  token:
+    description: "GitHub token for accessing and validating private repositories."
+    required: false
 runs:
   using: "node20"
   main: "dist/index.js"
