@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.6-rc.2](https://github.com/sanity-io/template-validator/compare/sr-v2.4.6-rc.1...sr-v2.4.6-rc.2) (2026-02-03)
+
+### Bug Fixes
+
+- duplicate copyright year in license ([a34ebe3](https://github.com/sanity-io/template-validator/commit/a34ebe3e9806278b751db755a77c37334678dbdc))
+
 ## [2.4.6-rc.1](https://github.com/sanity-io/template-validator/compare/sr-v2.4.5...sr-v2.4.6-rc.1) (2026-02-03)
 
 ### Bug Fixes
