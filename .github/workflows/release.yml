@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, rc]
 
 jobs:
   release:
@@ -115,7 +115,9 @@ jobs:
           git tag -fa "v$VERSION" -m "Release v$VERSION"
           git push -f origin "v$VERSION"
 
-          # Update major version tag
-          MAJOR=$(echo $VERSION | cut -d. -f1)
-          git tag -fa "v$MAJOR" -m "Update v$MAJOR to v$VERSION"
-          git push -f origin "v$MAJOR"
+          # Update major version tag (only for stable releases, not prereleases)
+          if [[ ! "$VERSION" =~ - ]]; then
+            MAJOR=$(echo $VERSION | cut -d. -f1)
+            git tag -fa "v$MAJOR" -m "Update v$MAJOR to v$VERSION"
+            git push -f origin "v$MAJOR"
+          fi
