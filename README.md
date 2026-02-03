@@ -49,11 +49,13 @@ npx @sanity/template-validator
 The recommended way to use the validator in your template project is to add it as a dev dependency and create a validation script:
 
 1. Add to your project:
+
 ```bash
 npm install --save-dev @sanity/template-validator
 ```
 
 2. Add a script to your `package.json`:
+
 ```json
 {
   "scripts": {
@@ -63,6 +65,7 @@ npm install --save-dev @sanity/template-validator
 ```
 
 3. Run the validation:
+
 ```bash
 npm run validate
 ```
@@ -131,6 +134,7 @@ async function validateLocalTemplate(directory: string): Promise<ValidationResul
 ```
 
 Parameters:
+
 - `directory`: Path to the template directory
 
 ### `validateRemoteTemplate`
@@ -140,15 +144,17 @@ Validates a remote Sanity template repository.
 ```typescript
 async function validateRemoteTemplate(
   baseUrl: string,
-  headers?: Record<string, string>
+  headers?: Record<string, string>,
 ): Promise<ValidationResult>
 ```
 
 Parameters:
+
 - `baseUrl`: The base URL to the raw repository content
 - `headers`: Custom headers for API requests (optional)
 
 Returns:
+
 ```typescript
 type ValidationResult = {
   isValid: boolean
@@ -185,26 +191,29 @@ async function getMonoRepo(fileReader: FileReader): Promise<string[] | undefined
 A valid Sanity template must meet the following criteria:
 
 ### For Single-Package Repositories:
+
 - Must have a valid `package.json` with 'sanity' dependency
 - Must have `sanity.config.js/ts/tsx` and `sanity.cli.js/ts`
 - Must have one of: `.env.template`, `.env.example`, `.env.local.template`, or `.env.local.example`
 
 ### For Monorepos:
+
 - Each package must have a valid `package.json`
 - At least one package must include 'sanity' in dependencies
 - At least one package must have Sanity configuration files
 - Each package must have appropriate environment template files
 
 ### Environment Files Must Include:
+
 - `SANITY_PROJECT_ID` or `SANITY_STUDIO_PROJECT_ID`
 - `SANITY_DATASET` or `SANITY_STUDIO_DATASET`
 
 ## GitHub Action Inputs
 
-| Input | Description | Required |
-|-------|-------------|----------|
-| `directory` | The directory to validate. Use this if you have multiple templates in a repository. | No |
-| `token` | GitHub token for accessing and validating private repositories. | No |
+| Input       | Description                                                                         | Required |
+| ----------- | ----------------------------------------------------------------------------------- | -------- |
+| `directory` | The directory to validate. Use this if you have multiple templates in a repository. | No       |
+| `token`     | GitHub token for accessing and validating private repositories.                     | No       |
 
 ## Contributing
 

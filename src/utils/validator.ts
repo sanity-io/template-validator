@@ -124,8 +124,8 @@ async function validatePackage(
       const pkg: PackageJson = JSON.parse(packageJson.content)
       hasSanityDep = Boolean(
         pkg.dependencies?.['sanity'] ||
-          pkg.dependencies?.['next-sanity'] ||
-          pkg.dependencies?.['@sanity/client'],
+        pkg.dependencies?.['next-sanity'] ||
+        pkg.dependencies?.['@sanity/client'],
       )
     } catch {
       errors.push(`Invalid package.json file in ${packageName}`)
