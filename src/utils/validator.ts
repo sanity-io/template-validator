@@ -12,7 +12,8 @@ export async function getMonoRepo(fileReader: FileReader): Promise<string[] | un
     return Promise.all(
       patterns.map(async (pattern) => {
         if (!pattern.includes('*')) return pattern.replace(/\/$/, '')
-        const baseDir = pattern.split('/*')[0].replace(/\/$/, '')
+        const [baseDirRaw = ''] = pattern.split('/*')
+        const baseDir = baseDirRaw.replace(/\/$/, '')
         const contents = await fileReader.readDir(baseDir).catch(() => [])
         return contents.map((dir) => join(baseDir, dir))
       }),
@@ -199,7 +200,7 @@ export async function validateTemplate(
   }
 
   const missingEnvTemplates = packages
-    .filter((_, i) => validations[i].hasSanityDep && !validations[i].hasEnvFile)
+    .filter((_, i) => validations[i] && validations[i].hasSanityDep && !validations[i].hasEnvFile)
     .map((p) => p || ROOT_PACKAGE_NAME)
   const envExamples = ENV_TEMPLATE_FILES.join(', ')
   const missingTemplatesStr = missingEnvTemplates.join(', ')
