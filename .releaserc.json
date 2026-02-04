@@ -1,0 +1,5 @@
+{
+  "extends": "@sanity/semantic-release-preset",
+  "branches": ["main", {"name": "rc", "prerelease": "rc"}],
+  "tagFormat": "sr-v${version}"
+}
