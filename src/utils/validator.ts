@@ -2,7 +2,14 @@ import {join} from 'node:path'
 
 import {parse as parseYaml} from 'yaml'
 
-import {ENV_TEMPLATE_FILES, REQUIRED_ENV_VAR, ROOT_PACKAGE_NAME} from './constants'
+import {
+  ENV_TEMPLATE_FILES,
+  REQUIRED_ENV_VAR,
+  ROOT_PACKAGE_NAME,
+  SEED_DATA_EXTENSIONS,
+  SEED_DIR,
+  SEED_DIR_VALID_DATA_FILES,
+} from './constants'
 import type {FileReader} from './fileReader'
 import type {PackageJson, ValidationResult} from './types'
 
@@ -81,6 +88,77 @@ export async function getMonoRepo(fileReader: FileReader): Promise<string[] | un
   return undefined
 }
 
+async function validateSeedData(
+  fileReader: FileReader,
+  packagePath: string,
+): Promise<{errors: string[]; notices: string[]}> {
+  const errors: string[] = []
+  const notices: string[] = []
+  const packageName = packagePath || ROOT_PACKAGE_NAME
+  const seedExtensions: readonly string[] = SEED_DATA_EXTENSIONS
+
+  // Check files next to sanity.config for unrecognized seed data files
+  const rootFiles = await fileReader.listFiles(packagePath || '')
+  const recognizedRootFiles = ['seed.tar.gz', 'seed.ndjson']
+
+  for (const file of rootFiles) {
+    const hasSeedExtension = seedExtensions.some((ext) => file.endsWith(ext))
+    if (!hasSeedExtension) continue
+
+    if (!recognizedRootFiles.includes(file)) {
+      const filePath = packagePath ? `${packagePath}/${file}` : file
+      notices.push(
+        `Found "${filePath}" which won't be recognized by sanity init. To use as seed data, rename to: seed.tar.gz, seed.ndjson, seed/data.tar.gz, or seed/data.ndjson.`,
+      )
+    }
+  }
+
+  // Check if seed/ directory exists and validate its contents
+  const packageDirs = await fileReader.readDir(packagePath || '')
+  if (packageDirs.includes(SEED_DIR)) {
+    const seedDirPath = packagePath ? join(packagePath, SEED_DIR) : SEED_DIR
+    const seedFiles = await fileReader.listFiles(seedDirPath)
+    const validDataFiles: readonly string[] = SEED_DIR_VALID_DATA_FILES
+
+    for (const file of seedFiles) {
+      const hasSeedExtension = seedExtensions.some((ext) => file.endsWith(ext))
+      if (!hasSeedExtension) continue
+
+      if (!validDataFiles.includes(file)) {
+        errors.push(
+          `Unrecognized file "${file}" in ${packageName}/${SEED_DIR}/. Rename to data.tar.gz or data.ndjson.`,
+        )
+      }
+    }
+  }
+
+  return {errors, notices}
+}
+
+async function validateRootSeedData(fileReader: FileReader): Promise<string[]> {
+  const notices: string[] = []
+  const rootFiles = await fileReader.listFiles('')
+  const seedExtensions: readonly string[] = SEED_DATA_EXTENSIONS
+  const recognizedSeedNames = ['seed.tar.gz', 'seed.ndjson']
+
+  for (const file of rootFiles) {
+    const hasSeedExtension = seedExtensions.some((ext) => file.endsWith(ext))
+    if (!hasSeedExtension) continue
+
+    if (recognizedSeedNames.includes(file)) {
+      notices.push(
+        `Found "${file}" at repository root which won't be recognized by sanity init. Move it next to a sanity.config file in a studio package.`,
+      )
+    } else {
+      notices.push(
+        `Found "${file}" at repository root which won't be recognized by sanity init. Seed data should be next to a sanity.config file and named: seed.tar.gz, seed.ndjson, seed/data.tar.gz, or seed/data.ndjson.`,
+      )
+    }
+  }
+
+  return notices
+}
+
 /** @public */
 async function validatePackage(
   fileReader: FileReader,
@@ -91,6 +169,7 @@ async function validatePackage(
   hasEnvFile: boolean
   hasSanityDep: boolean
   errors: string[]
+  notices: string[]
 }> {
   const packageName = packagePath || ROOT_PACKAGE_NAME
   const errors: string[] = []
@@ -163,12 +242,22 @@ async function validatePackage(
     }
   }
 
+  // Validate seed data for studio packages (those with sanity.config)
+  let seedErrors: string[] = []
+  let seedWarnings: string[] = []
+  if (hasSanityConfig) {
+    const seedResult = await validateSeedData(fileReader, packagePath)
+    seedErrors = seedResult.errors
+    seedWarnings = seedResult.notices
+  }
+
   return {
     hasSanityConfig,
     hasSanityCli,
     hasEnvFile: Boolean(envFile),
     hasSanityDep,
-    errors,
+    errors: [...errors, ...seedErrors],
+    notices: seedWarnings,
   }
 }
 
@@ -178,10 +267,12 @@ export async function validateTemplate(
   packages: string[] = [''],
 ): Promise<ValidationResult> {
   const errors: string[] = []
+  const notices: string[] = []
   const validations = await Promise.all(packages.map((pkg) => validatePackage(fileReader, pkg)))
 
   for (const v of validations) {
     errors.push(...v.errors)
+    notices.push(...v.notices)
   }
 
   const hasSanityDep = validations.some((v) => v.hasSanityDep)
@@ -210,8 +301,16 @@ export async function validateTemplate(
     errors.push(`At least one package must include an env template file [${envExamples}]`)
   }
 
+  // Scan repo root for misplaced seed data in monorepos
+  const isMonoRepo = packages.length > 1 || (packages.length === 1 && packages[0] !== '')
+  if (isMonoRepo) {
+    const rootSeedWarnings = await validateRootSeedData(fileReader)
+    notices.push(...rootSeedWarnings)
+  }
+
   return {
     isValid: errors.length === 0,
     errors,
+    notices,
   }
 }

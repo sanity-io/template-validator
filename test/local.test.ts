@@ -118,4 +118,53 @@ describe('Local Template Tests', () => {
       expect(packages?.sort()).toEqual(['apps/app', 'apps/studio', 'packages/config'].sort())
     })
   })
+
+  describe('seed-valid', () => {
+    it('should validate with recognized seed.tar.gz and no notices', async () => {
+      const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/seed-valid`)
+      expect(result.isValid).toBe(true)
+      expect(result.errors).toHaveLength(0)
+      expect(result.notices).toHaveLength(0)
+    })
+  })
+
+  describe('seed-valid-folder', () => {
+    it('should validate with recognized seed/data.tar.gz and no notices', async () => {
+      const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/seed-valid-folder`)
+      expect(result.isValid).toBe(true)
+      expect(result.errors).toHaveLength(0)
+      expect(result.notices).toHaveLength(0)
+    })
+  })
+
+  describe('seed-unrecognized-file', () => {
+    it('should notice unrecognized seed data file', async () => {
+      const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/seed-unrecognized-file`)
+      expect(result.isValid).toBe(true)
+      expect(result.errors).toHaveLength(0)
+      expect(result.notices).toHaveLength(1)
+      expect(result.notices[0]).toContain('backup.ndjson')
+    })
+  })
+
+  describe('seed-invalid-in-dir', () => {
+    it('should fail validation for wrongly-named file in seed/ directory', async () => {
+      const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/seed-invalid-in-dir`)
+      expect(result.isValid).toBe(false)
+      expect(result.errors).toHaveLength(1)
+      expect(result.errors[0]).toContain('export.tar.gz')
+      expect(result.errors[0]).toContain('seed/')
+    })
+  })
+
+  describe('seed-misplaced-root', () => {
+    it('should notice seed data file at monorepo root', async () => {
+      const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/seed-misplaced-root`)
+      expect(result.isValid).toBe(true)
+      expect(result.errors).toHaveLength(0)
+      expect(result.notices).toHaveLength(1)
+      expect(result.notices[0]).toContain('misplaced.ndjson')
+      expect(result.notices[0]).toContain('repository root')
+    })
+  })
 })
