@@ -7,6 +7,7 @@ import type {GitHubDirectoryEntry} from './types'
 export interface FileReader {
   readFile(filePath: string): Promise<{exists: boolean; content: string}>
   readDir(dirPath: string): Promise<string[]>
+  listFiles(dirPath: string): Promise<string[]>
 }
 
 /** @public */
@@ -27,27 +28,39 @@ export class GitHubFileReader implements FileReader {
     }
   }
 
-  async readDir(dirPath: string): Promise<string[]> {
-    try {
-      // Convert raw GitHub URL to API URL for directory listing
-      // From: https://raw.githubusercontent.com/owner/repo/branch/path
-      // To: https://api.github.com/repos/owner/repo/contents/path?ref=branch
-      const url = new URL(this.baseUrl)
-      const [, owner, repo, branch = '', ...rest] = url.pathname.split('/')
-      const dirSlug = join(`repos/${owner}/${repo}/contents`, ...rest, dirPath)
-      const apiUrl = new URL(dirSlug, 'https://api.github.com')
-      apiUrl.searchParams.set('ref', branch) // Set branch ref
+  private buildGitHubApiUrl(dirPath: string): URL {
+    // Convert raw GitHub URL to API URL for directory listing
+    // From: https://raw.githubusercontent.com/owner/repo/branch/path
+    // To: https://api.github.com/repos/owner/repo/contents/path?ref=branch
+    const url = new URL(this.baseUrl)
+    const [, owner, repo, branch = '', ...rest] = url.pathname.split('/')
+    const dirSlug = join(`repos/${owner}/${repo}/contents`, ...rest, dirPath)
+    const apiUrl = new URL(dirSlug, 'https://api.github.com')
+    apiUrl.searchParams.set('ref', branch)
+    return apiUrl
+  }
 
+  private async fetchDirEntries(dirPath: string): Promise<GitHubDirectoryEntry[]> {
+    try {
+      const apiUrl = this.buildGitHubApiUrl(dirPath)
       const response = await fetch(apiUrl, {headers: this.headers})
       if (!response.ok) return []
 
       const data: GitHubDirectoryEntry[] = await response.json()
-      return Array.isArray(data)
-        ? data.filter((item) => item.type === 'dir').map((item) => item.name)
-        : []
+      return Array.isArray(data) ? data : []
     } catch {
       return []
     }
+  }
+
+  async readDir(dirPath: string): Promise<string[]> {
+    const entries = await this.fetchDirEntries(dirPath)
+    return entries.filter((item) => item.type === 'dir').map((item) => item.name)
+  }
+
+  async listFiles(dirPath: string): Promise<string[]> {
+    const entries = await this.fetchDirEntries(dirPath)
+    return entries.filter((item) => item.type === 'file').map((item) => item.name)
   }
 }
 
@@ -80,6 +93,16 @@ export class LocalFileReader implements FileReader {
       const fullPath = join(this.basePath, dirPath)
       const entries = await readdir(fullPath, {withFileTypes: true})
       return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name)
+    } catch {
+      return []
+    }
+  }
+
+  async listFiles(dirPath: string): Promise<string[]> {
+    try {
+      const fullPath = join(this.basePath, dirPath)
+      const entries = await readdir(fullPath, {withFileTypes: true})
+      return entries.filter((entry) => entry.isFile()).map((entry) => entry.name)
     } catch {
       return []
     }

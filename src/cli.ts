@@ -8,6 +8,12 @@ async function validateWithCli() {
   try {
     const result = await validateLocalTemplate(directory)
 
+    if (result.notices.length > 0) {
+      for (const notice of result.notices) {
+        console.log(`- ${notice}`)
+      }
+    }
+
     if (!result.isValid) {
       console.error('Validation failed:')
       for (const error of result.errors) {
