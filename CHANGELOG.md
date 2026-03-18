@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/sanity-io/template-validator/compare/sr-v3.0.0...sr-v3.0.1) (2026-03-18)
+
+### Bug Fixes
+
+- update undici to resolve npm audit vulnerabilities ([ba6e128](https://github.com/sanity-io/template-validator/commit/ba6e128dd3fef0d6b5414d013222253441ce46cf))
+
 ## [3.0.0](https://github.com/sanity-io/template-validator/compare/sr-v2.4.5...sr-v3.0.0) (2026-02-04)
 
 ### ⚠ BREAKING CHANGES
