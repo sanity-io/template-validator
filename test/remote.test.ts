@@ -89,6 +89,35 @@ describe('Remote Template Tests', () => {
     })
   })
 
+  describe('app-template', () => {
+      const fileReader = new GitHubFileReader(`${REMOTE_FIXTURES}/app-template`)
+
+      it('should validate template using helper successfully', async () => {
+        const result = await validateRemoteTemplate(`${REMOTE_FIXTURES}/app-template`)
+        if (!result.isValid) {
+          console.debug('Validation failed with errors:', result.errors)
+        }
+        expect(result.isValid).toBe(true)
+        expect(result.errors).toHaveLength(0)
+      })
+
+      it('should validate template successfully', async () => {
+        const packages = await getMonoRepo(fileReader)
+        const result = await validateTemplate(fileReader, packages)
+        if (!result.isValid) {
+          console.debug('Validation failed with errors:', result.errors)
+        }
+        expect(result.isValid).toBe(true)
+        expect(result.errors).toHaveLength(0)
+      })
+
+      it('should handle non-monorepo structure', async () => {
+        const packages = await getMonoRepo(fileReader)
+
+        expect(packages).toBeUndefined()
+      })
+    })
+
   describe('pnpm-wildcard-monorepo', () => {
     const fileReader = new GitHubFileReader(`${REMOTE_FIXTURES}/pnpm-wildcard-monorepo`)
 
