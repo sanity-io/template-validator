@@ -42,6 +42,7 @@
     "prepare": "husky",
     "prepublishOnly": "pnpm run build",
     "test": "vitest run",
+    "test:watch": "vitest watch",
     "ts:check": "tsc --noEmit"
   },
   "lint-staged": {
