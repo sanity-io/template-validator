@@ -71,7 +71,12 @@ describe('Remote Template Tests', () => {
       const result = await validateRemoteTemplate(`${REMOTE_FIXTURES}/invalid-repo`)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors.length).toBe(4)
+      expect(result.errors).toMatchInlineSnapshot(`
+        [
+          "Template must be a studio (requires sanity.config.[js|ts|jsx|tsx] and "sanity" dependency) or a SDK app (requires sanity.cli.[js|ts], "sanity", and "@sanity/sdk-react" dependencies)",
+          "At least one package must include an env template file [.env.template, .env.example, .env.local.example, .env.local.template]",
+        ]
+      `)
     })
 
     it('should fail validation', async () => {
@@ -79,7 +84,12 @@ describe('Remote Template Tests', () => {
       const result = await validateTemplate(fileReader, packages)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors.length).toBe(4)
+      expect(result.errors).toMatchInlineSnapshot(`
+        [
+          "Template must be a studio (requires sanity.config.[js|ts|jsx|tsx] and "sanity" dependency) or a SDK app (requires sanity.cli.[js|ts], "sanity", and "@sanity/sdk-react" dependencies)",
+          "At least one package must include an env template file [.env.template, .env.example, .env.local.example, .env.local.template]",
+        ]
+      `)
     })
 
     it('should handle non-monorepo structure', async () => {

@@ -1,0 +1,12 @@
+{
+  "name": "app-template",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "sanity dev"
+  },
+  "dependencies": {
+    "sanity": "^3.66.1",
+    "@sanity/sdk": "^2.8.0",
+    "@sanity/sdk-react": "^2.8.0"
+  }
+}
