@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/sanity-io/template-validator/compare/sr-v3.0.1...sr-v3.1.0) (2026-03-19)
+
+### Features
+
+- **ci:** setup pkr.pr new workflow ([3ca28ff](https://github.com/sanity-io/template-validator/commit/3ca28ff027f783793346fb9dcf5c7455d06bf199))
+
 ## [3.0.1](https://github.com/sanity-io/template-validator/compare/sr-v3.0.0...sr-v3.0.1) (2026-03-18)
 
 ### Bug Fixes
