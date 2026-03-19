@@ -184,19 +184,21 @@ export async function validateTemplate(
     errors.push(...v.errors)
   }
 
-  const hasSanityDep = validations.some((v) => v.hasSanityDep)
-  if (!hasSanityDep) {
-    errors.push('At least one package must include "sanity" as a dependency in package.json')
-  }
-
   const hasSanityConfig = validations.some((v) => v.hasSanityConfig)
-  if (!hasSanityConfig) {
-    errors.push('At least one package must include a sanity.config.[js|ts|tsx] file')
-  }
 
-  const hasSanityCli = validations.some((v) => v.hasSanityCli)
-  if (!hasSanityCli) {
-    errors.push('At least one package must include a sanity.cli.[js|ts] file')
+  if (hasSanityConfig) {
+    const hasSanityDep = validations.some((v) => v.hasSanityDep)
+    if (!hasSanityDep) {
+      errors.push('At least one package must include "sanity" as a dependency in package.json')
+    }
+  } else {
+    const hasSanityCli = validations.some((v) => v.hasSanityCli)
+
+    if (!hasSanityCli) {
+      errors.push(
+        'At least one package must include a sanity.config.[js|ts|tsx] or sanity.cli.[js|ts] file.',
+      )
+    }
   }
 
   const missingEnvTemplates = packages
