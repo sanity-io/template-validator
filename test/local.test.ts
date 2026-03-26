@@ -71,7 +71,12 @@ describe('Local Template Tests', () => {
       const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/invalid-repo`)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors.length).toBe(4)
+      expect(result.errors).toMatchInlineSnapshot(`
+        [
+          "Template must be a studio (requires sanity.config.[js|ts|jsx|tsx] and "sanity" dependency) or a SDK app (requires sanity.cli.[js|ts], "sanity", and "@sanity/sdk-react" dependencies)",
+          "At least one package must include an env template file [.env.template, .env.example, .env.local.example, .env.local.template]",
+        ]
+      `)
     })
 
     it('should fail validation', async () => {
@@ -79,7 +84,41 @@ describe('Local Template Tests', () => {
       const result = await validateTemplate(fileReader, packages)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors.length).toBe(4)
+      expect(result.errors).toMatchInlineSnapshot(`
+        [
+          "Template must be a studio (requires sanity.config.[js|ts|jsx|tsx] and "sanity" dependency) or a SDK app (requires sanity.cli.[js|ts], "sanity", and "@sanity/sdk-react" dependencies)",
+          "At least one package must include an env template file [.env.template, .env.example, .env.local.example, .env.local.template]",
+        ]
+      `)
+    })
+
+    it('should handle non-monorepo structure', async () => {
+      const packages = await getMonoRepo(fileReader)
+
+      expect(packages).toBeUndefined()
+    })
+  })
+
+  describe('app-template', () => {
+    const fileReader = new LocalFileReader(`${LOCAL_FIXTURES}/app-template`)
+
+    it('should validate template using helper successfully', async () => {
+      const result = await validateLocalTemplate(`${LOCAL_FIXTURES}/app-template`)
+      if (!result.isValid) {
+        console.debug('Validation failed with errors:', result.errors)
+      }
+      expect(result.isValid).toBe(true)
+      expect(result.errors).toHaveLength(0)
+    })
+
+    it('should validate template successfully', async () => {
+      const packages = await getMonoRepo(fileReader)
+      const result = await validateTemplate(fileReader, packages)
+      if (!result.isValid) {
+        console.debug('Validation failed with errors:', result.errors)
+      }
+      expect(result.isValid).toBe(true)
+      expect(result.errors).toHaveLength(0)
     })
 
     it('should handle non-monorepo structure', async () => {

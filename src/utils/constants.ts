@@ -1,8 +1,13 @@
 /** @public */
-export const REQUIRED_ENV_VAR = {
+export const REQUIRED_ENV_VAR_STUDIO = {
   PROJECT_ID: /SANITY(?:_STUDIO)?_PROJECT_ID/,
   DATASET: /SANITY(?:_STUDIO)?_DATASET/,
 } as const
+
+/** @public */
+export const REQUIRED_ENV_VAR_APP = {
+  SANITY_APP_ORGANIZATION_ID: /SANITY_APP_ORGANIZATION_ID/,
+}
 
 /** @public */
 export const ENV_FILE = {

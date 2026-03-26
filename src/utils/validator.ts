@@ -2,7 +2,12 @@ import {join} from 'node:path'
 
 import {parse as parseYaml} from 'yaml'
 
-import {ENV_TEMPLATE_FILES, REQUIRED_ENV_VAR, ROOT_PACKAGE_NAME} from './constants'
+import {
+  ENV_TEMPLATE_FILES,
+  REQUIRED_ENV_VAR_APP,
+  REQUIRED_ENV_VAR_STUDIO,
+  ROOT_PACKAGE_NAME,
+} from './constants'
 import type {FileReader} from './fileReader'
 import type {PackageJson, ValidationResult} from './types'
 
@@ -90,6 +95,7 @@ async function validatePackage(
   hasSanityCli: boolean
   hasEnvFile: boolean
   hasSanityDep: boolean
+  hasSanitySdkDep: boolean
   errors: string[]
 }> {
   const packageName = packagePath || ROOT_PACKAGE_NAME
@@ -100,6 +106,7 @@ async function validatePackage(
     'sanity.config.ts',
     'sanity.config.js',
     'sanity.config.tsx',
+    'sanity.config.jsx',
     'sanity.cli.ts',
     'sanity.cli.js',
     ...ENV_TEMPLATE_FILES,
@@ -119,14 +126,12 @@ async function validatePackage(
   }
 
   let hasSanityDep = false
+  let hasSanitySdkDep = false
   if (packageJson?.exists) {
     try {
       const pkg: PackageJson = JSON.parse(packageJson.content)
-      hasSanityDep = Boolean(
-        pkg.dependencies?.['sanity'] ||
-        pkg.dependencies?.['next-sanity'] ||
-        pkg.dependencies?.['@sanity/client'],
-      )
+      hasSanityDep = Boolean(pkg.dependencies?.['sanity'] || pkg.devDependencies?.['sanity'])
+      hasSanitySdkDep = Boolean(pkg.dependencies?.['@sanity/sdk-react'])
     } catch {
       errors.push(`Invalid package.json file in ${packageName}`)
     }
@@ -135,7 +140,10 @@ async function validatePackage(
   const hasSanityConfig = fileChecks.some(
     ({exists, file}) =>
       exists &&
-      (file === 'sanity.config.ts' || file === 'sanity.config.js' || file === 'sanity.config.tsx'),
+      (file === 'sanity.config.ts' ||
+        file === 'sanity.config.js' ||
+        file === 'sanity.config.tsx' ||
+        file === 'sanity.config.jsx'),
   )
 
   const hasSanityCli = fileChecks.some(
@@ -156,9 +164,19 @@ async function validatePackage(
       )
     }
 
-    for (const [name, pattern] of Object.entries(REQUIRED_ENV_VAR)) {
-      if (!envContent.match(pattern)) {
-        errors.push(`Environment template in ${packageName} is missing required variable: ${name}`)
+    const requiredVars = hasSanityConfig
+      ? REQUIRED_ENV_VAR_STUDIO
+      : hasSanityCli
+        ? REQUIRED_ENV_VAR_APP
+        : null
+
+    if (requiredVars) {
+      for (const [name, pattern] of Object.entries(requiredVars)) {
+        if (!envContent.match(pattern)) {
+          errors.push(
+            `Environment template in ${packageName} is missing required variable: ${name}`,
+          )
+        }
       }
     }
   }
@@ -168,6 +186,7 @@ async function validatePackage(
     hasSanityCli,
     hasEnvFile: Boolean(envFile),
     hasSanityDep,
+    hasSanitySdkDep,
     errors,
   }
 }
@@ -184,19 +203,32 @@ export async function validateTemplate(
     errors.push(...v.errors)
   }
 
-  const hasSanityDep = validations.some((v) => v.hasSanityDep)
-  if (!hasSanityDep) {
-    errors.push('At least one package must include "sanity" as a dependency in package.json')
-  }
-
   const hasSanityConfig = validations.some((v) => v.hasSanityConfig)
-  if (!hasSanityConfig) {
-    errors.push('At least one package must include a sanity.config.[js|ts|tsx] file')
-  }
-
   const hasSanityCli = validations.some((v) => v.hasSanityCli)
-  if (!hasSanityCli) {
-    errors.push('At least one package must include a sanity.cli.[js|ts] file')
+  const hasSanityDep = validations.some((v) => v.hasSanityDep)
+  const hasSanitySdkDep = validations.some((v) => v.hasSanitySdkDep)
+
+  const isStudio = hasSanityConfig && hasSanityDep
+  const isApp = hasSanityCli && hasSanityDep && hasSanitySdkDep
+
+  if (!isStudio && !isApp) {
+    if (hasSanityConfig) {
+      errors.push('Studio templates must include "sanity" as a dependency in package.json')
+    } else if (hasSanityCli) {
+      if (!hasSanityDep) {
+        errors.push('App templates must include "sanity" as a dependency in package.json')
+      }
+
+      if (!hasSanitySdkDep) {
+        errors.push(
+          'App templates must include "@sanity/sdk-react" as a dependency in package.json',
+        )
+      }
+    } else {
+      errors.push(
+        'Template must be a studio (requires sanity.config.[js|ts|jsx|tsx] and "sanity" dependency) or a SDK app (requires sanity.cli.[js|ts], "sanity", and "@sanity/sdk-react" dependencies)',
+      )
+    }
   }
 
   const missingEnvTemplates = packages
