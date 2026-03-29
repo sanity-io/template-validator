@@ -19,6 +19,7 @@ export interface PackageJson {
 export type ValidationResult = {
   isValid: boolean
   errors: string[]
+  notices: string[]
 }
 
 /** @public */
