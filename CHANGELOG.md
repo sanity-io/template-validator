@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/sanity-io/template-validator/compare/sr-v3.1.0...sr-v3.1.1) (2026-09-01)
+
+### Performance Improvements
+
+- mark GitHub Actions dependencies as build-only ([#26](https://github.com/sanity-io/template-validator/issues/26)) ([d8a1845](https://github.com/sanity-io/template-validator/commit/d8a1845bb96ca83a27012e72ef217dab9b72d949))
+
 ## [3.1.0](https://github.com/sanity-io/template-validator/compare/sr-v3.0.1...sr-v3.1.0) (2026-03-19)
 
 ### Features
