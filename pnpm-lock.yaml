@@ -8,16 +8,16 @@ importers:
 
   .:
     dependencies:
+      yaml:
+        specifier: ^2.6.1
+        version: 2.8.2
+    devDependencies:
       '@actions/core':
         specifier: ^3.0.0
         version: 3.0.0
       '@actions/github':
         specifier: ^9.0.0
         version: 9.0.0
-      yaml:
-        specifier: ^2.6.1
-        version: 2.8.2
-    devDependencies:
       '@sanity/pkg-utils':
         specifier: ^7.1.1
         version: 7.11.9(@types/node@18.19.130)(typescript@5.9.3)

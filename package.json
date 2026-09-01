@@ -53,11 +53,11 @@
   "browserslist": "extends @sanity/browserslist-config",
   "prettier": "@sanity/prettier-config",
   "dependencies": {
-    "@actions/core": "^3.0.0",
-    "@actions/github": "^9.0.0",
     "yaml": "^2.6.1"
   },
   "devDependencies": {
+    "@actions/core": "^3.0.0",
+    "@actions/github": "^9.0.0",
     "@sanity/pkg-utils": "^7.1.1",
     "@sanity/prettier-config": "^1.0.3",
     "@sanity/semantic-release-preset": "^5.0.0",
