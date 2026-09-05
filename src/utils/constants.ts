@@ -22,3 +22,20 @@ export const ENV_TEMPLATE_FILES = [
 
 /** @public */
 export const ROOT_PACKAGE_NAME = 'root package' as const
+
+/** @public */
+export const SEED_DATA_PATHS = [
+  'seed.tar.gz',
+  'seed.ndjson',
+  'seed/data.tar.gz',
+  'seed/data.ndjson',
+] as const
+
+/** @public */
+export const SEED_DIR = 'seed' as const
+
+/** @public */
+export const SEED_DIR_VALID_DATA_FILES = ['data.tar.gz', 'data.ndjson'] as const
+
+/** @public */
+export const SEED_DATA_EXTENSIONS = ['.tar.gz', '.ndjson'] as const

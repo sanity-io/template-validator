@@ -17,6 +17,12 @@ async function run(): Promise<void> {
     }
     const result = await validateRemoteTemplate(baseUrl, headers)
 
+    if (result.notices.length > 0) {
+      for (const notice of result.notices) {
+        core.notice(notice)
+      }
+    }
+
     if (!result.isValid) {
       core.setFailed(result.errors.join('\n'))
     }

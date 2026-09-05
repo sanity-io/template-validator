@@ -2,6 +2,7 @@
 *.log
 *.tgz
 
+.claude/
 .DS_Store
 dist/
 etc

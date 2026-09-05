@@ -11,6 +11,7 @@ A validation utility for Sanity.io template repositories. Use it as a dependency
 - Supports monorepo detection and validation
 - Can be used as a Node.js dependency, GitHub Action, or CLI tool
 - Validates environment variables and configuration files
+- Validates optional seed data placement and naming conventions
 - TypeScript support with full type definitions
 - Local directory validation support
 
@@ -159,6 +160,7 @@ Returns:
 type ValidationResult = {
   isValid: boolean
   errors: string[]
+  notices: string[]
 }
 ```
 
@@ -207,6 +209,28 @@ A valid Sanity template must meet the following criteria:
 
 - `SANITY_PROJECT_ID` or `SANITY_STUDIO_PROJECT_ID`
 - `SANITY_DATASET` or `SANITY_STUDIO_DATASET`
+
+### Seed Data
+
+Seed data is optional. When present, `sanity init` will prompt the user to import sample content. Seed files are detected per studio package (the directory containing `sanity.config`), in priority order (first match is used):
+
+1. `seed.tar.gz`
+2. `seed.ndjson`
+3. `seed/data.tar.gz`
+4. `seed/data.ndjson`
+
+#### Notices
+
+The following produce notices (validation still passes):
+
+- Any `.tar.gz` or `.ndjson` file next to `sanity.config` that is not one of the four recognized seed paths
+- Any `.tar.gz` or `.ndjson` file at the repository root in a monorepo (where the root is not a studio package)
+
+#### Errors
+
+The following cause validation to fail:
+
+- A `seed/` directory exists next to `sanity.config` and contains `.tar.gz` or `.ndjson` files not named `data.tar.gz` or `data.ndjson`
 
 ## GitHub Action Inputs
 
