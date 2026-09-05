@@ -1,0 +1,10 @@
+{
+  "name": "app-template",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "sanity start"
+  },
+  "dependencies": {
+    "@sanity/client": "^6.0.0"
+  }
+}

@@ -1,7 +1,7 @@
 /** @public */
 export const REQUIRED_ENV_VAR = {
-  PROJECT_ID: /SANITY(?:_STUDIO)?_PROJECT_ID/,
-  DATASET: /SANITY(?:_STUDIO)?_DATASET/,
+  PROJECT_ID: /SANITY(?:_(?:STUDIO|APP))?_PROJECT_ID/,
+  DATASET: /SANITY(?:_(?:STUDIO|APP))?_DATASET/,
 } as const
 
 /** @public */

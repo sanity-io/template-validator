@@ -71,7 +71,7 @@ describe('Remote Template Tests', () => {
       const result = await validateRemoteTemplate(`${REMOTE_FIXTURES}/invalid-repo`)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors.length).toBe(4)
+      expect(result.errors.length).toBe(2)
     })
 
     it('should fail validation', async () => {
@@ -79,7 +79,7 @@ describe('Remote Template Tests', () => {
       const result = await validateTemplate(fileReader, packages)
 
       expect(result.isValid).toBe(false)
-      expect(result.errors.length).toBe(4)
+      expect(result.errors.length).toBe(2)
     })
 
     it('should handle non-monorepo structure', async () => {
